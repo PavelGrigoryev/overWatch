@@ -1,0 +1,11 @@
+###findAll coins
+GET http://localhost:8080/coins/
+Accept: application/json
+
+###findBySymbol coin
+GET http://localhost:8080/coins/bySymbol/BTC
+Accept: application/json
+
+###getPriceFromCoinLorel coin
+GET http://localhost:8080/coins/getPriceFromCoinLore/87
+Accept: application/json
