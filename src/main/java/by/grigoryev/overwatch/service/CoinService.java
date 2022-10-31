@@ -6,6 +6,8 @@ import reactor.core.publisher.Mono;
 
 public interface CoinService {
 
+    Flux<CoinDto> viewListOfAvailable();
+
     Flux<CoinDto> findAll();
 
     Mono<CoinDto> findDistinctFirstBySymbol(String symbol);

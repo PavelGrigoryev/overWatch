@@ -18,6 +18,10 @@ public class CoinController {
 
     private final CoinService coinService;
 
+    @GetMapping("/available")
+    public Flux<CoinDto> viewListOfAvailable() {
+        return coinService.viewListOfAvailable();
+    }
 
     @GetMapping
     public Flux<CoinDto> findAll() {

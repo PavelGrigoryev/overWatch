@@ -22,9 +22,25 @@ public class CoinServiceImpl implements CoinService {
     @Value("${api.url}")
     private String url;
 
+    @Value("${available.coins}")
+    private String availableCoins;
+
     private final CoinRepository coinRepository;
 
     private final CoinMapper coinMapper;
+
+    private WebClient webClient;
+
+    @Override
+    public Flux<CoinDto> viewListOfAvailable() {
+        webClient = WebClient.create(url);
+        return webClient.get()
+                .uri("/?id=" + availableCoins)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToFlux(CoinDto.class)
+                .log();
+    }
 
     @Override
     public Flux<CoinDto> findAll() {
@@ -42,7 +58,7 @@ public class CoinServiceImpl implements CoinService {
 
     @Override
     public Flux<CoinDto> getPriceFromCoinLore(String id) {
-        WebClient webClient = WebClient.create(url);
+        webClient = WebClient.create(url);
         return webClient.get()
                 .uri("/?id=" + id)
                 .accept(MediaType.APPLICATION_JSON)
