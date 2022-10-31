@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
 @Repository
-public interface CoinRepository extends ReactiveCrudRepository<Coin, String> {
+public interface CoinRepository extends ReactiveCrudRepository<Coin, Long> {
 
     Mono<Coin> findDistinctFirstBySymbol(String symbol);
 

@@ -9,3 +9,7 @@ Accept: application/json
 ###getPriceFromCoinLorel coin
 GET http://localhost:8080/coins/getPriceFromCoinLore/90
 Accept: application/json
+
+###save user
+POST http://localhost:8080/users?userName=Pavel&symbol=BTC
+Content-Type: application/json

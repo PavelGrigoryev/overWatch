@@ -13,24 +13,25 @@ import java.time.LocalDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
-        "symbol",
-        "name",
-        "price_usd",
+        "user_name",
+        "coin_symbol",
+        "coin_price",
         "time_of_creation"
 })
-public class CoinDto {
+public class UserDto {
 
     private Long id;
 
-    private String symbol;
+    @JsonProperty("user_name")
+    private String userName;
 
-    private String name;
+    @JsonProperty("coin_symbol")
+    private String coinSymbol;
 
-    @JsonProperty("price_usd")
-    private BigDecimal priceUsd;
+    @JsonProperty("coin_price")
+    private BigDecimal coinPrice;
 
     @JsonProperty("time_of_creation")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime localDateTime;
-
 }
