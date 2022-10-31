@@ -1,36 +1,34 @@
 package by.grigoryev.overwatch.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "id",
-        "symbol",
-        "name",
-        "price_usd"
-})
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table("coins")
 public class Coin {
 
-    @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("symbol")
     private String symbol;
 
-    @JsonProperty("name")
     private String name;
 
-    @JsonProperty("price_usd")
     @Column("price_usd")
+    @JsonProperty("price_usd")
     private BigDecimal priceUsd;
+
+    @Column("time_of_creation")
+    private LocalDateTime localDateTime;
 
 }

@@ -1,6 +1,6 @@
 package by.grigoryev.overwatch.controller;
 
-import by.grigoryev.overwatch.model.Coin;
+import by.grigoryev.overwatch.dto.CoinDto;
 import by.grigoryev.overwatch.service.CoinService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,19 +20,19 @@ public class CoinController {
 
 
     @GetMapping
-    public Flux<Coin> findAll() {
+    public Flux<CoinDto> findAll() {
         return coinService.findAll();
     }
 
     @GetMapping("/bySymbol/{symbol}")
-    public Mono<ResponseEntity<Coin>> findDistinctFirstBySymbol(@PathVariable String symbol) {
+    public Mono<ResponseEntity<CoinDto>> findDistinctFirstBySymbol(@PathVariable String symbol) {
         return coinService.findDistinctFirstBySymbol(symbol)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/getPriceFromCoinLore/{id}")
-    public Flux<Coin> getPriceFromCoinLore(@PathVariable String id) {
+    public Flux<CoinDto> getPriceFromCoinLore(@PathVariable String id) {
         return coinService.getPriceFromCoinLore(id);
     }
 }

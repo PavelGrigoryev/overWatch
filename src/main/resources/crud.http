@@ -7,5 +7,5 @@ GET http://localhost:8080/coins/bySymbol/BTC
 Accept: application/json
 
 ###getPriceFromCoinLorel coin
-GET http://localhost:8080/coins/getPriceFromCoinLore/87
+GET http://localhost:8080/coins/getPriceFromCoinLore/90
 Accept: application/json
