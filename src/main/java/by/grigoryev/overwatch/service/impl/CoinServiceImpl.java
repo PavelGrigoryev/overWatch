@@ -8,6 +8,7 @@ import by.grigoryev.overwatch.service.CoinService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -43,29 +44,23 @@ public class CoinServiceImpl implements CoinService {
     }
 
     @Override
-    public Flux<CoinDto> findAll() {
-        return coinRepository.findAll()
+    public Mono<CoinDto> findFirstBySymbolOrderByLocalDateTimeDesc(String symbol) {
+        return coinRepository.findFirstBySymbolOrderByLocalDateTimeDesc(symbol)
                 .map(coinMapper::toCoinDto)
                 .log();
     }
 
-    @Override
-    public Mono<CoinDto> findDistinctFirstBySymbol(String symbol) {
-        return coinRepository.findDistinctFirstBySymbol(symbol)
-                .map(coinMapper::toCoinDto)
-                .log();
-    }
-
-    @Override
-    public Flux<CoinDto> getPriceFromCoinLore(String id) {
+    @Scheduled(fixedRate = 60000)
+    private void savePricesForAvailable() {
         webClient = WebClient.create(url);
-        return webClient.get()
-                .uri("/?id=" + id)
+        webClient.get()
+                .uri("/?id=" + availableCoins)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToFlux(Coin.class)
                 .flatMap(this::createCoinMono)
-                .log();
+                .log()
+                .subscribe();
     }
 
     private Mono<CoinDto> createCoinMono(Coin coin) {

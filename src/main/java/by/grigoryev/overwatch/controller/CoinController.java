@@ -18,25 +18,16 @@ public class CoinController {
 
     private final CoinService coinService;
 
-    @GetMapping("/available")
+    @GetMapping
     public Flux<CoinDto> viewListOfAvailable() {
         return coinService.viewListOfAvailable();
     }
 
-    @GetMapping
-    public Flux<CoinDto> findAll() {
-        return coinService.findAll();
-    }
-
-    @GetMapping("/bySymbol/{symbol}")
-    public Mono<ResponseEntity<CoinDto>> findDistinctFirstBySymbol(@PathVariable String symbol) {
-        return coinService.findDistinctFirstBySymbol(symbol)
+    @GetMapping("/{symbol}")
+    public Mono<ResponseEntity<CoinDto>> findFirstBySymbolOrderByLocalDateTimeDesc(@PathVariable String symbol) {
+        return coinService.findFirstBySymbolOrderByLocalDateTimeDesc(symbol)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/getPriceFromCoinLore/{id}")
-    public Flux<CoinDto> getPriceFromCoinLore(@PathVariable String id) {
-        return coinService.getPriceFromCoinLore(id);
-    }
 }

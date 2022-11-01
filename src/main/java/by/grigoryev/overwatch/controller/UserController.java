@@ -18,8 +18,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public Mono<ResponseEntity<UserDto>> save(@RequestParam String userName, String symbol) {
-        return userService.save(userName, symbol)
+    public Mono<ResponseEntity<UserDto>> notify(@RequestParam String userName, String symbol) {
+        return userService.notify(userName, symbol)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
