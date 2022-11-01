@@ -8,6 +8,6 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface UserRepository extends ReactiveCrudRepository<User, Long> {
 
-    Mono<User> findFirstByCoinSymbolOrderByLocalDateTimeDesc(String symbol);
+    Mono<User> findFirstByCoinSymbolOrderByTimeOfRegistrationDesc(String symbol);
 
 }

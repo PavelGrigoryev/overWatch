@@ -30,7 +30,7 @@ public class User {
     @Column("coin_price")
     private BigDecimal coinPrice;
 
-    @Column("time_of_creation")
-    private LocalDateTime localDateTime;
+    @Column("time_of_registration")
+    private LocalDateTime timeOfRegistration;
 
 }

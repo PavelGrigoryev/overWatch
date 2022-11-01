@@ -44,8 +44,8 @@ public class CoinServiceImpl implements CoinService {
     }
 
     @Override
-    public Mono<CoinDto> findFirstBySymbolOrderByLocalDateTimeDesc(String symbol) {
-        return coinRepository.findFirstBySymbolOrderByLocalDateTimeDesc(symbol)
+    public Mono<CoinDto> findFirstBySymbolOrderByTimeOfReceivingDesc(String symbol) {
+        return coinRepository.findFirstBySymbolOrderByTimeOfReceivingDesc(symbol)
                 .map(coinMapper::toCoinDto)
                 .log();
     }
@@ -69,7 +69,7 @@ public class CoinServiceImpl implements CoinService {
                 .name(coin.getName())
                 .symbol(coin.getSymbol())
                 .priceUsd(coin.getPriceUsd())
-                .localDateTime(LocalDateTime.now())
+                .timeOfReceiving(LocalDateTime.now())
                 .build();
         return coinRepository.save(mapCoin)
                 .map(coinMapper::toCoinDto);

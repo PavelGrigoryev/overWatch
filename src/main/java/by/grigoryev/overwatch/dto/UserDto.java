@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
         "user_name",
         "coin_symbol",
         "coin_price",
-        "time_of_creation"
+        "time_of_registration"
 })
 public class UserDto {
 
@@ -31,7 +31,7 @@ public class UserDto {
     @JsonProperty("coin_price")
     private BigDecimal coinPrice;
 
-    @JsonProperty("time_of_creation")
+    @JsonProperty("time_of_registration")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime localDateTime;
+    private LocalDateTime timeOfRegistration;
 }

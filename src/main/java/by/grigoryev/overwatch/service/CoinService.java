@@ -8,6 +8,6 @@ public interface CoinService {
 
     Flux<CoinDto> viewListOfAvailable();
 
-    Mono<CoinDto> findFirstBySymbolOrderByLocalDateTimeDesc(String symbol);
+    Mono<CoinDto> findFirstBySymbolOrderByTimeOfReceivingDesc(String symbol);
 
 }

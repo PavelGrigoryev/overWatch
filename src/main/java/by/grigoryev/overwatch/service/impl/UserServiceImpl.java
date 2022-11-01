@@ -15,6 +15,8 @@ import reactor.core.publisher.Mono;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -27,16 +29,19 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
 
+    private final List<User> userList = new ArrayList<>();
+
     @Override
     public Mono<UserDto> notify(String userName, String symbol) {
-        return coinService.findFirstBySymbolOrderByLocalDateTimeDesc(symbol)
+        return coinService.findFirstBySymbolOrderByTimeOfReceivingDesc(symbol)
                 .flatMap(coinDto -> {
                     User user = User.builder()
                             .userName(userName)
                             .coinSymbol(coinDto.getSymbol())
                             .coinPrice(coinDto.getPriceUsd())
-                            .localDateTime(LocalDateTime.now())
+                            .timeOfRegistration(LocalDateTime.now())
                             .build();
+                    userList.add(user);
                     return userRepository.save(user)
                             .map(userMapper::toUserDto);
                 })
@@ -45,22 +50,23 @@ public class UserServiceImpl implements UserService {
 
     @Scheduled(fixedRate = 60000)
     private void trackPrice() {
-        String s = "BTC"; //todo добавить нормальный ввод
-
-        userRepository.findFirstByCoinSymbolOrderByLocalDateTimeDesc(s)
-                .zipWith(coinService.findFirstBySymbolOrderByLocalDateTimeDesc(s))
-                .map(userPrice -> {
-                    BigDecimal oldPrice = userPrice.getT1().getCoinPrice();
-                    BigDecimal newPrice = userPrice.getT2().getPriceUsd();
-                    BigDecimal percentage = ((oldPrice.subtract(newPrice))
-                            .divide(newPrice, 4, RoundingMode.HALF_UP))
-                            .multiply(BigDecimal.valueOf(100));
-                    if (Math.abs(percentage.doubleValue()) >= 1) {
-                        log.warn("Цена для юзера {} c {} поменялась на {} %", userPrice.getT1().getUserName(), userPrice.getT2().getName(), percentage);
-                    }
-                    return percentage;
-                })
-                .subscribe();
+        if (!userList.isEmpty()) {
+            userList.forEach(user -> userRepository.findFirstByCoinSymbolOrderByTimeOfRegistrationDesc(user.getCoinSymbol())
+                    .zipWith(coinService.findFirstBySymbolOrderByTimeOfReceivingDesc(user.getCoinSymbol()))
+                    .map(userPrice -> {
+                        BigDecimal oldPrice = userPrice.getT1().getCoinPrice();
+                        BigDecimal newPrice = userPrice.getT2().getPriceUsd();
+                        BigDecimal percentage = ((oldPrice.subtract(newPrice))
+                                .divide(newPrice, 4, RoundingMode.HALF_UP))
+                                .multiply(BigDecimal.valueOf(100));
+                        if (Math.abs(percentage.doubleValue()) >= 1) {
+                            log.warn("Price for user {} with {} changed {} %",
+                                    userPrice.getT1().getUserName(), userPrice.getT2().getName(), percentage);
+                        }
+                        return percentage;
+                    })
+                    .subscribe());
+        }
     }
 
 }

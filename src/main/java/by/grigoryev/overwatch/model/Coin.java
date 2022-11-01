@@ -28,7 +28,7 @@ public class Coin {
     @JsonProperty("price_usd")
     private BigDecimal priceUsd;
 
-    @Column("time_of_creation")
-    private LocalDateTime localDateTime;
+    @Column("time_of_receiving")
+    private LocalDateTime timeOfReceiving;
 
 }

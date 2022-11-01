@@ -19,7 +19,7 @@ databaseChangeLog:
                   name: price_usd
                   type: decimal
               - column:
-                  name: time_of_creation
+                  name: time_of_receiving
                   type: timestamp
   - changeSet:
       id: create-users
@@ -45,5 +45,5 @@ databaseChangeLog:
                   name: coin_price
                   type: decimal
               - column:
-                  name: time_of_creation
+                  name: time_of_registration
                   type: timestamp

@@ -24,8 +24,8 @@ public class CoinController {
     }
 
     @GetMapping("/{symbol}")
-    public Mono<ResponseEntity<CoinDto>> findFirstBySymbolOrderByLocalDateTimeDesc(@PathVariable String symbol) {
-        return coinService.findFirstBySymbolOrderByLocalDateTimeDesc(symbol)
+    public Mono<ResponseEntity<CoinDto>> findFirstBySymbolOrderByTimeOfReceivingDesc(@PathVariable String symbol) {
+        return coinService.findFirstBySymbolOrderByTimeOfReceivingDesc(symbol)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
