@@ -20,9 +20,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class CoinServiceImpl implements CoinService {
 
-    @Value("${api.url}")
-    private String url;
-
     @Value("${available.coins}")
     private String availableCoins;
 
@@ -30,13 +27,12 @@ public class CoinServiceImpl implements CoinService {
 
     private final CoinMapper coinMapper;
 
-    private WebClient webClient;
+    private final WebClient webClient;
 
     @Override
     public Flux<CoinDto> viewListOfAvailable() {
-        webClient = WebClient.create(url);
         return webClient.get()
-                .uri("/?id=" + availableCoins)
+                .uri(availableCoins)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToFlux(CoinDto.class)
@@ -52,9 +48,8 @@ public class CoinServiceImpl implements CoinService {
 
     @Scheduled(fixedRate = 60000)
     private void savePricesForAvailable() {
-        webClient = WebClient.create(url);
         webClient.get()
-                .uri("/?id=" + availableCoins)
+                .uri(availableCoins)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToFlux(Coin.class)
