@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
                 .log("notify " + userName + " for " + symbol);
     }
 
+    // ((a - b) / a) * 100
     @Scheduled(initialDelay = 10000, fixedRate = 60000)
     private void trackPrice() {
         userRepository.findAll()
@@ -52,10 +53,8 @@ public class UserServiceImpl implements UserService {
                         .map(userPrice -> {
                             BigDecimal oldPrice = userPrice.getT1().getCoinPrice();
                             BigDecimal newPrice = userPrice.getT2().getPriceUsd();
-                            BigDecimal percentage = ((oldPrice.subtract(newPrice))
-                                    .divide(((oldPrice.add(newPrice))
-                                            .divide(BigDecimal.valueOf(2), 4, RoundingMode.HALF_DOWN)), 4, RoundingMode.HALF_UP))
-                                    .multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.DOWN);
+                            BigDecimal percentage = (((newPrice.subtract(oldPrice)).divide(newPrice, 4, RoundingMode.DOWN))
+                                    .multiply(BigDecimal.valueOf(100))).setScale(2, RoundingMode.DOWN);
                             if (Math.abs(percentage.doubleValue()) >= 1) {
                                 log.warn("Price for user #{} {} with {} changed {} %", userPrice.getT1().getId(),
                                         userPrice.getT1().getUserName(), userPrice.getT2().getName(), percentage);
