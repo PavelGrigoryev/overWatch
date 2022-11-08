@@ -33,7 +33,7 @@ public class CoinController {
 
     @Operation(
             summary = "View the current price for the specified cryptocurrency.", tags = "Coin",
-            description = "Let's find our cryptocurrency by symbol",
+            description = "Let's find our cryptocurrency by symbol: BTC, ETH, SOL",
             parameters = @Parameter(name = "symbol", description = "Enter symbol here", example = "BTC")
     )
     @GetMapping("/{symbol}")

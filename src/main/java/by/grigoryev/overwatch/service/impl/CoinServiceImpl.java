@@ -36,14 +36,14 @@ public class CoinServiceImpl implements CoinService {
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToFlux(CoinDto.class)
-                .log();
+                .log("viewListOfAvailable");
     }
 
     @Override
     public Mono<CoinDto> findFirstBySymbolOrderByTimeOfReceivingDesc(String symbol) {
         return coinRepository.findFirstBySymbolOrderByTimeOfReceivingDesc(symbol)
                 .map(coinMapper::toCoinDto)
-                .log();
+                .log("findBySymbol " + symbol);
     }
 
     @Scheduled(fixedRate = 60000)
@@ -54,7 +54,7 @@ public class CoinServiceImpl implements CoinService {
                 .retrieve()
                 .bodyToFlux(Coin.class)
                 .flatMap(this::createCoinMono)
-                .log()
+                .log("savePricesForAvailable")
                 .subscribe();
     }
 
