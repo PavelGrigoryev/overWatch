@@ -14,7 +14,6 @@ import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -56,11 +55,10 @@ public class UserServiceImpl implements UserService {
                             BigDecimal percentage = ((oldPrice.subtract(newPrice))
                                     .divide(((oldPrice.add(newPrice))
                                             .divide(BigDecimal.valueOf(2), 4, RoundingMode.HALF_DOWN)), 4, RoundingMode.HALF_UP))
-                                    .multiply(BigDecimal.valueOf(100));
-                            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                                    .multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.DOWN);
                             if (Math.abs(percentage.doubleValue()) >= 1) {
                                 log.warn("Price for user #{} {} with {} changed {} %", userPrice.getT1().getId(),
-                                        userPrice.getT1().getUserName(), userPrice.getT2().getName(), decimalFormat.format(percentage));
+                                        userPrice.getT1().getUserName(), userPrice.getT2().getName(), percentage);
                             }
                             return percentage;
                         })

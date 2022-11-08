@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @OpenAPIDefinition(
         info = @Info(
                 title = "Crypto Currency Watcher",
-                version = "1.0.9",
+                version = "1.1.2",
                 contact = @Contact(
                         name = "Author: Grigoryev Pavel",
                         url = "https://pavelgrigoryev.github.io/GrigoryevPavel/"
