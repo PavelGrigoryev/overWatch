@@ -33,4 +33,7 @@ public class User {
     @Column("time_of_registration")
     private LocalDateTime timeOfRegistration;
 
+    @Column("telegram_id")
+    private Long telegramUserId;
+
 }

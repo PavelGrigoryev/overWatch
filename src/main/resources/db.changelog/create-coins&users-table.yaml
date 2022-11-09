@@ -47,3 +47,6 @@ databaseChangeLog:
               - column:
                   name: time_of_registration
                   type: timestamp
+              - column:
+                  name: telegram_id
+                  type: bigint

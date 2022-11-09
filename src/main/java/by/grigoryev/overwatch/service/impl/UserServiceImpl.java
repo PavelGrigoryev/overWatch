@@ -1,5 +1,6 @@
 package by.grigoryev.overwatch.service.impl;
 
+import by.grigoryev.overwatch.bot.TelegramBot;
 import by.grigoryev.overwatch.dto.UserDto;
 import by.grigoryev.overwatch.mapper.UserMapper;
 import by.grigoryev.overwatch.model.User;
@@ -27,14 +28,16 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
 
+    private final TelegramBot telegramBot;
+
     @Override
     public Mono<UserDto> notify(String userName, String symbol) {
         return coinRepository.findFirstBySymbolOrderByTimeOfReceivingDesc(symbol)
-                .flatMap(coinDto -> {
+                .flatMap(coin -> {
                     User user = User.builder()
                             .userName(userName)
-                            .coinSymbol(coinDto.getSymbol())
-                            .coinPrice(coinDto.getPriceUsd())
+                            .coinSymbol(coin.getSymbol())
+                            .coinPrice(coin.getPriceUsd())
                             .timeOfRegistration(LocalDateTime.now())
                             .build();
                     return userRepository.save(user)
@@ -43,7 +46,9 @@ public class UserServiceImpl implements UserService {
                 .log("notify " + userName + " for " + symbol);
     }
 
-    // ((a - b) / a) * 100
+    /**
+     * Percentage calculation formula: ((a - b) / a) * 100
+     */
     @Scheduled(initialDelay = 10000, fixedRate = 60000)
     private void trackPrice() {
         userRepository.findAll()
@@ -55,9 +60,13 @@ public class UserServiceImpl implements UserService {
                             BigDecimal newPrice = userPrice.getT2().getPriceUsd();
                             BigDecimal percentage = (((newPrice.subtract(oldPrice)).divide(newPrice, 4, RoundingMode.DOWN))
                                     .multiply(BigDecimal.valueOf(100))).setScale(2, RoundingMode.DOWN);
-                            if (Math.abs(percentage.doubleValue()) >= 1) {
+                            if (Math.abs(percentage.doubleValue()) >= 0.01) {
                                 log.warn("Price for user #{} {} with {} changed {} %", userPrice.getT1().getId(),
                                         userPrice.getT1().getUserName(), userPrice.getT2().getName(), percentage);
+                                if (userPrice.getT1().getTelegramUserId() != null) {
+                                    telegramBot.sendText(userPrice.getT1().getTelegramUserId(), "Price for cryptocurrency " +
+                                            userPrice.getT2().getName() + " changed " + percentage + "%");
+                                }
                             }
                             return percentage;
                         })
