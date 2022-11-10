@@ -48,9 +48,22 @@ public class TelegramBot extends TelegramLongPollingBot {
         Message message = update.getMessage();
         org.telegram.telegrambots.meta.api.objects.User user = message.getFrom();
 
-        log.warn(user.getUserName()  + " wrote: " + message.getText());
-        sendText(user.getId(), "Hi " + user.getFirstName() + " " + user.getLastName() + " !");
+        log.warn(user.getUserName() + " wrote: " + message.getText());
 
+        if (message.hasText()) {
+            sendText(user.getId(), "Dear " + user.getUserName() + " !");
+            String text = message.getText();
+            if ("BTC".equals(text) || "ETH".equals(text) || "SOL".equals(text)) {
+                saveTelegramUser(message, user);
+            } else {
+                sendText(user.getId(), "Available only: BTC, ETH, SOL!");
+            }
+        } else {
+            sendText(user.getId(), "Available only text messages!");
+        }
+    }
+
+    private void saveTelegramUser(Message message, org.telegram.telegrambots.meta.api.objects.User user) {
         coinRepository.findFirstBySymbolOrderByTimeOfReceivingDesc(message.getText())
                 .flatMap(coin -> {
                     User userFromTelegram = User.builder()
