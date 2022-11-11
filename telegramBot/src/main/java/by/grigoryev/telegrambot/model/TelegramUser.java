@@ -1,4 +1,4 @@
-package by.grigoryev.overwatch.model;
+package by.grigoryev.telegrambot.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table("users")
-public class User {
+@Table("telegram_users")
+public class TelegramUser {
 
     @Id
     private Long id;
@@ -24,13 +24,22 @@ public class User {
     @Column("user_name")
     private String userName;
 
+    @Column("first_name")
+    private String firstName;
+
+    @Column("last_name")
+    private String lastName;
+
     @Column("coin_symbol")
     private String coinSymbol;
 
     @Column("coin_price")
     private BigDecimal coinPrice;
 
-    @Column("time_of_registration")
-    private LocalDateTime timeOfRegistration;
+    @Column("time_when_the_message_was_sent")
+    private LocalDateTime timeWhenTheMessageWasSent;
+
+    @Column("telegram_id")
+    private Long telegramUserId;
 
 }

@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>by.grigoryev</groupId>
-    <artifactId>overWatch</artifactId>
+    <artifactId>telegramBot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>overWatch</name>
-    <description>overWatch</description>
+    <name>telegramBot</name>
+    <description>telegramBot</description>
     <properties>
         <java.version>17</java.version>
         <lombok.version>1.18.24</lombok.version>
@@ -62,20 +62,15 @@
             <version>${mapstruct.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-webflux-core</artifactId>
-            <version>1.6.12</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-webflux-ui</artifactId>
-            <version>1.6.12</version>
-        </dependency>
-        <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-resolver-dns-native-macos</artifactId>
             <version>4.1.84.Final</version>
             <classifier>osx-aarch_64</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots-spring-boot-starter</artifactId>
+            <version>6.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

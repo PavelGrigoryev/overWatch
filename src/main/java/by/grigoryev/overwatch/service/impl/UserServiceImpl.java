@@ -1,6 +1,5 @@
 package by.grigoryev.overwatch.service.impl;
 
-import by.grigoryev.overwatch.bot.TelegramBot;
 import by.grigoryev.overwatch.dto.UserDto;
 import by.grigoryev.overwatch.mapper.UserMapper;
 import by.grigoryev.overwatch.model.Coin;
@@ -30,8 +29,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
 
-    private final TelegramBot telegramBot;
-
     @Override
     public Mono<UserDto> notify(String userName, String symbol) {
         return coinRepository.findFirstBySymbolOrderByTimeOfReceivingDesc(symbol)
@@ -45,8 +42,7 @@ public class UserServiceImpl implements UserService {
     @Scheduled(initialDelay = 10000, fixedRate = 60000)
     private void trackPrice() {
         userRepository.findAll()
-                .toStream()
-                .forEach(user -> userRepository.findById(user.getId())
+                .subscribe(user -> userRepository.findById(user.getId())
                         .zipWith(coinRepository.findFirstBySymbolOrderByTimeOfReceivingDesc(user.getCoinSymbol()))
                         .map(userPrice -> {
                             BigDecimal oldPrice = userPrice.getT1().getCoinPrice();
@@ -64,11 +60,6 @@ public class UserServiceImpl implements UserService {
         if (Math.abs(percentage.doubleValue()) >= 0.01) {
             log.warn("Price for user #{} {} with {} changed {} %", userPrice.getT1().getId(),
                     userPrice.getT1().getUserName(), userPrice.getT2().getName(), percentage);
-            if (userPrice.getT1().getTelegramUserId() != null) {
-                telegramBot.sendText(userPrice.getT1().getTelegramUserId(), "Price for cryptocurrency " +
-                        userPrice.getT2().getName() + " changed " + percentage + "%\n" + "Old was: " +
-                        userPrice.getT1().getCoinPrice() + "\nNew is: " + userPrice.getT2().getPriceUsd());
-            }
         }
     }
 

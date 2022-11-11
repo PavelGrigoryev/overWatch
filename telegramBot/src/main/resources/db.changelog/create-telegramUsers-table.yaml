@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-telegram-users
+      author: Pavel Grigoryev
+      changes:
+        - createTable:
+            tableName: telegram_users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    unique: true
+              - column:
+                  name: user_name
+                  type: varchar(30)
+              - column:
+                  name: first_name
+                  type: varchar(30)
+              - column:
+                  name: last_name
+                  type: varchar(30)
+              - column:
+                  name: coin_symbol
+                  type: varchar(30)
+              - column:
+                  name: coin_price
+                  type: decimal
+              - column:
+                  name: time_when_the_message_was_sent
+                  type: timestamp
+              - column:
+                  name: telegram_id
+                  type: bigint

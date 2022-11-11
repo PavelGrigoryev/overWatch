@@ -1,19 +1,19 @@
 ###viewListOfAvailable coins
-GET http://localhost:8080/coins
+GET http://localhost:8085/coins
 Accept: application/json
 
 ###findBySymbol coin
-GET http://localhost:8080/coins/BTC
+GET http://localhost:8085/coins/BTC
 Accept: application/json
 
 ###save user#1
-POST http://localhost:8080/users?userName=Pavel&symbol=BTC
+POST http://localhost:8085/users?userName=Pavel&symbol=BTC
 Content-Type: application/json
 
 ###save user#2
-POST http://localhost:8080/users?userName=Nikita&symbol=ETH
+POST http://localhost:8085/users?userName=Nikita&symbol=ETH
 Content-Type: application/json
 
 ###save user#3
-POST http://localhost:8080/users?userName=Sergio&symbol=SOL
+POST http://localhost:8085/users?userName=Sergio&symbol=SOL
 Content-Type: application/json
