@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>overWatch</artifactId>
         <groupId>by.grigoryev</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>telegramBot</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>telegramBot</name>
-    <description>telegramBot</description>
+    <modelVersion>4.0.0</modelVersion>
+    <name>cryptoCurrency</name>
+    <description>cryptoCurrency</description>
+    <artifactId>cryptoCurrency</artifactId>
     <properties>
         <java.version>17</java.version>
         <lombok.version>1.18.24</lombok.version>
@@ -60,15 +60,20 @@
             <version>${mapstruct.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-webflux-core</artifactId>
+            <version>1.6.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-webflux-ui</artifactId>
+            <version>1.6.12</version>
+        </dependency>
+        <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-resolver-dns-native-macos</artifactId>
             <version>4.1.84.Final</version>
             <classifier>osx-aarch_64</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegrambots-spring-boot-starter</artifactId>
-            <version>6.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
