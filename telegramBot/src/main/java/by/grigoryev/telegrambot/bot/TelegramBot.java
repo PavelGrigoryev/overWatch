@@ -52,7 +52,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd 'T' HH:mm:ss");
 
             switch (text) {
-                case "BTC", "ETH", "SOL" -> telegramUserService.notify(text, update).
+                case "BTC", "ETH", "SOL" -> telegramUserService.register(text, update).
                         subscribe(telegramUserDto -> sendText(user.getId(),
                                 "You will be notified if the price of cryptocurrency " + text + " changes"));
                 case "ViewAll" -> telegramUserService.viewListOfAvailable()

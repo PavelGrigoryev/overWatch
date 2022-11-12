@@ -6,6 +6,7 @@ import by.grigoryev.cryptocurrency.model.Coin;
 import by.grigoryev.cryptocurrency.model.User;
 import by.grigoryev.cryptocurrency.repository.CoinRepository;
 import by.grigoryev.cryptocurrency.repository.UserRepository;
+import by.grigoryev.cryptocurrency.service.TelegramNotificationService;
 import by.grigoryev.cryptocurrency.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,8 @@ public class UserServiceImpl implements UserService {
     private final CoinRepository coinRepository;
 
     private final UserMapper userMapper;
+
+    private final TelegramNotificationService telegramNotificationService;
 
     @Override
     public Mono<UserDto> notify(String userName, String symbol) {
@@ -60,6 +63,10 @@ public class UserServiceImpl implements UserService {
         if (Math.abs(percentage.doubleValue()) >= 0.01) {
             log.warn("Price for user #{} {} with {} changed {} %", userPrice.getT1().getId(),
                     userPrice.getT1().getUserName(), userPrice.getT2().getName(), percentage);
+            telegramNotificationService.notifyTelegramUser("Price for cryptocurrency " +
+                            userPrice.getT2().getName() + " changed " + percentage + "%\n" + "Old was: " +
+                            userPrice.getT1().getCoinPrice() + "\nNew is: " + userPrice.getT2().getPriceUsd())
+                    .subscribe();
         }
     }
 

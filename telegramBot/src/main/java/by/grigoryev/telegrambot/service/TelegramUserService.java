@@ -8,10 +8,12 @@ import reactor.core.publisher.Mono;
 
 public interface TelegramUserService {
 
-    Mono<TelegramUserDto> notify(String symbol, Update update);
+    Mono<TelegramUserDto> register(String symbol, Update update);
 
     Flux<TelegramCoinDto> viewListOfAvailable();
 
     Mono<TelegramCoinDto> findFirstBySymbol(String symbol);
+
+    Mono<String> notifyTelegramUser(String message);
 
 }

@@ -28,7 +28,7 @@ public class TelegramUserServiceImpl implements TelegramUserService {
     private final WebClient webClient;
 
     @Override
-    public Mono<TelegramUserDto> notify(String symbol, Update update) {
+    public Mono<TelegramUserDto> register(String symbol, Update update) {
         User user = update.getMessage().getFrom();
 
         return webClient.post()
@@ -37,7 +37,7 @@ public class TelegramUserServiceImpl implements TelegramUserService {
                 .retrieve()
                 .bodyToMono(TelegramUserDto.class)
                 .flatMap(telegramUserDto -> createTelegramUserMono(user, telegramUserDto))
-                .log("notify " + user.getUserName() + " for " + symbol);
+                .log("register " + user.getUserName() + " with " + symbol);
     }
 
     @Override
@@ -58,6 +58,12 @@ public class TelegramUserServiceImpl implements TelegramUserService {
                 .retrieve()
                 .bodyToMono(TelegramCoinDto.class)
                 .log("findBySymbol " + symbol);
+    }
+
+    @Override
+    public Mono<String> notifyTelegramUser(String message) {
+        return Mono.just(message)
+                .log();
     }
 
     private Mono<TelegramUserDto> createTelegramUserMono(User user, TelegramUserDto telegramUserDto) {
