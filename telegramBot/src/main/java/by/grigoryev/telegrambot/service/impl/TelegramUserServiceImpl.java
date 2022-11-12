@@ -7,11 +7,9 @@ import by.grigoryev.telegrambot.model.TelegramUser;
 import by.grigoryev.telegrambot.repository.TelegramUserRepository;
 import by.grigoryev.telegrambot.service.TelegramUserService;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import reactor.core.publisher.Flux;
@@ -30,10 +28,8 @@ public class TelegramUserServiceImpl implements TelegramUserService {
     private final WebClient webClient;
 
     @Override
-    @SneakyThrows
     public Mono<TelegramUserDto> notify(String symbol, Update update) {
-        Message message = update.getMessage();
-        User user = message.getFrom();
+        User user = update.getMessage().getFrom();
 
         return webClient.post()
                 .uri("/users?userName=" + user.getUserName() + "&symbol=" + symbol)
@@ -52,6 +48,16 @@ public class TelegramUserServiceImpl implements TelegramUserService {
                 .retrieve()
                 .bodyToFlux(TelegramCoinDto.class)
                 .log("viewListOfAvailable");
+    }
+
+    @Override
+    public Mono<TelegramCoinDto> findFirstBySymbol(String symbol) {
+        return webClient.get()
+                .uri("/coins/" + symbol)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(TelegramCoinDto.class)
+                .log("findBySymbol " + symbol);
     }
 
     private Mono<TelegramUserDto> createTelegramUserMono(User user, TelegramUserDto telegramUserDto) {

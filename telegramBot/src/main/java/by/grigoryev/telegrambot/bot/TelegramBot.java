@@ -1,5 +1,6 @@
 package by.grigoryev.telegrambot.bot;
 
+import by.grigoryev.telegrambot.dto.TelegramCoinDto;
 import by.grigoryev.telegrambot.service.TelegramUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -13,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.time.format.DateTimeFormatter;
+import java.util.function.Consumer;
 
 @Slf4j
 @Component
@@ -48,22 +50,36 @@ public class TelegramBot extends TelegramLongPollingBot {
             sendText(user.getId(), "Dear " + user.getUserName() + " !");
             String text = message.getText();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd 'T' HH:mm:ss");
-            if ("BTC".equals(text) || "ETH".equals(text) || "SOL".equals(text)) {
-                telegramUserService.notify(text, update).
+
+            switch (text) {
+                case "BTC", "ETH", "SOL" -> telegramUserService.notify(text, update).
                         subscribe(telegramUserDto -> sendText(user.getId(),
                                 "You will be notified if the price of cryptocurrency " + text + " changes"));
-            } else if ("ViewAll".equals(text)) {
-                telegramUserService.viewListOfAvailable()
-                        .subscribe(telegramCoinDto -> sendText(user.getId(), "id: " + telegramCoinDto.getId() +
-                                "\nsymbol: " + telegramCoinDto.getSymbol() + "\nname: " + telegramCoinDto.getName() +
-                                "\nprice_usd: " + telegramCoinDto.getPriceUsd() + "\ndate: " +
-                                telegramCoinDto.getTimeOfReceiving().format(formatter)));
-            } else {
-                sendText(user.getId(), "Available commands : \nBTC \nETH \nSOL \nViewAll");
+                case "ViewAll" -> telegramUserService.viewListOfAvailable()
+                        .subscribe(showTelegramCoinDtoToUser(user, formatter));
+                case "Symbol:BTC", "Symbol:ETH", "Symbol:SOL" ->
+                        telegramUserService.findFirstBySymbol(text.substring(7, 10))
+                                .subscribe(showTelegramCoinDtoToUser(user, formatter));
+                default -> sendText(user.getId(), """
+                        Available commands :
+                        BTC
+                        ETH
+                        SOL
+                        ViewAll
+                        Symbol:BTC
+                        Symbol:ETH
+                        Symbol:SOL""");
             }
         } else {
             sendText(user.getId(), "Available only text messages!");
         }
+    }
+
+    private Consumer<TelegramCoinDto> showTelegramCoinDtoToUser(User user, DateTimeFormatter formatter) {
+        return telegramCoinDto -> sendText(user.getId(), "id: " + telegramCoinDto.getId() +
+                "\nsymbol: " + telegramCoinDto.getSymbol() + "\nname: " + telegramCoinDto.getName() +
+                "\nprice_usd: " + telegramCoinDto.getPriceUsd() + "\ndate: " +
+                telegramCoinDto.getTimeOfReceiving().format(formatter));
     }
 
     @SneakyThrows
