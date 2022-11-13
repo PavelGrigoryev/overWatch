@@ -60,12 +60,6 @@ public class TelegramUserServiceImpl implements TelegramUserService {
                 .log("findBySymbol " + symbol);
     }
 
-    @Override
-    public Mono<String> notifyTelegramUser(String message) {
-        return Mono.just(message)
-                .log();
-    }
-
     private Mono<TelegramUserDto> createTelegramUserMono(User user, TelegramUserDto telegramUserDto) {
         TelegramUser telegramUser = TelegramUser.builder()
                 .userName(user.getUserName())

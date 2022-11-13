@@ -1,6 +1,7 @@
 package by.grigoryev.telegrambot.controller;
 
-import by.grigoryev.telegrambot.service.TelegramUserService;
+import by.grigoryev.telegrambot.dto.TelegramNotification;
+import by.grigoryev.telegrambot.service.TelegramNotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,11 +15,11 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/telegrams")
 public class TelegramUserController {
 
-    private final TelegramUserService telegramUserService;
+    private final TelegramNotificationService telegramNotificationService;
 
     @PostMapping
-    public Mono<ResponseEntity<String>> notifyTelegramUser(@RequestParam String message) {
-        return telegramUserService.notifyTelegramUser(message)
+    public Mono<ResponseEntity<TelegramNotification>> notifyTelegramUser(@RequestParam String message) {
+        return telegramNotificationService.notifyTelegramUser(message)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
