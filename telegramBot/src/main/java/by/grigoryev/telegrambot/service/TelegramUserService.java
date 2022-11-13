@@ -14,6 +14,4 @@ public interface TelegramUserService {
 
     Mono<TelegramCoinDto> findFirstBySymbol(String symbol);
 
-    Mono<String> notifyTelegramUser(String message);
-
 }

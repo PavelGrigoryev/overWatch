@@ -1,10 +1,10 @@
 package by.grigoryev.telegrambot.service;
 
-import by.grigoryev.telegrambot.dto.TelegramNotification;
+import by.grigoryev.telegrambot.dto.TelegramNotificationDto;
 import reactor.core.publisher.Mono;
 
 public interface TelegramNotificationService {
 
-    Mono<TelegramNotification> notifyTelegramUser(String message);
+    Mono<TelegramNotificationDto> notifyTelegramUser(String userName, String message);
 
 }

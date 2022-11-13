@@ -11,10 +11,10 @@ import reactor.core.publisher.Mono;
 public class NotificationServiceImpl implements NotificationService {
 
     @Override
-    public Mono<NotificationDto> notifyTelegramUser(String message) {
+    public Mono<NotificationDto> notifyTelegramUser(String userName, String message) {
         WebClient webClient = WebClient.create();
         return webClient.post()
-                .uri("http://localhost:8084/telegrams?message=" + message)
+                .uri("http://localhost:8084/telegrams?userName=" + userName + "&message=" + message)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(NotificationDto.class)

@@ -1,7 +1,7 @@
 package by.grigoryev.telegrambot.service.impl;
 
 import by.grigoryev.telegrambot.bot.TelegramBot;
-import by.grigoryev.telegrambot.dto.TelegramNotification;
+import by.grigoryev.telegrambot.dto.TelegramNotificationDto;
 import by.grigoryev.telegrambot.repository.TelegramUserRepository;
 import by.grigoryev.telegrambot.service.TelegramNotificationService;
 import lombok.RequiredArgsConstructor;
@@ -17,16 +17,16 @@ public class TelegramNotificationServiceImpl implements TelegramNotificationServ
     private final TelegramUserRepository telegramUserRepository;
 
     @Override
-    public Mono<TelegramNotification> notifyTelegramUser(String message) {
-        return Mono.from(telegramUserRepository.findAll())
+    public Mono<TelegramNotificationDto> notifyTelegramUser(String userName, String message) {
+        return Mono.from(telegramUserRepository.findByUserName(userName)
                 .map(telegramUser -> {
-                    TelegramNotification telegramNotification = TelegramNotification.builder()
+                    TelegramNotificationDto telegramNotificationDto = TelegramNotificationDto.builder()
                             .message(message)
                             .build();
                     telegramBot.sendText(telegramUser.getTelegramUserId(), message);
-                    return telegramNotification;
+                    return telegramNotificationDto;
                 })
-                .log();
+                .log());
     }
 
 }
