@@ -63,8 +63,7 @@ public class UserServiceImpl implements UserService {
         if (Math.abs(percentage.doubleValue()) >= 0.01) {
             log.warn("Price for user #{} {} with {} changed {} %", userPrice.getT1().getId(),
                     userPrice.getT1().getUserName(), userPrice.getT2().getName(), percentage);
-            notificationService.notifyTelegramUser(userPrice.getT1().getUserName(), "Price for user "
-                            + userPrice.getT1().getUserName() + " with cryptocurrency " +
+            notificationService.notifyTelegramUser(userPrice.getT1().getUserName(), "Price for cryptocurrency " +
                             userPrice.getT2().getName() + " changed " + percentage + "%\n" + "Old was: " +
                             userPrice.getT1().getCoinPrice() + "\nNew is: " + userPrice.getT2().getPriceUsd())
                     .subscribe();
