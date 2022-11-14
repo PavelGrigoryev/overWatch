@@ -69,6 +69,7 @@ public class TelegramUserServiceImpl implements TelegramUserService {
                 .coinPrice(telegramUserDto.getCoinPrice())
                 .timeWhenTheMessageWasSent(LocalDateTime.now())
                 .telegramUserId(user.getId())
+                .languageCode(user.getLanguageCode())
                 .build();
         return telegramUserRepository.save(telegramUser)
                 .map(telegramUserMapper::toTelegramUserDto);

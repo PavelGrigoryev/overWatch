@@ -42,4 +42,7 @@ public class TelegramUser {
     @Column("telegram_id")
     private Long telegramUserId;
 
+    @Column("language_code")
+    private String languageCode;
+
 }

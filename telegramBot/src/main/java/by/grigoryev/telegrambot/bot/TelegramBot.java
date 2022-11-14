@@ -43,32 +43,60 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
         User user = message.getFrom();
+        String text = message.getText();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd 'T' HH:mm:ss");
 
-        log.warn(user.getUserName() + " wrote: " + message.getText());
+        log.warn(user.getUserName() + " " + user.getFirstName() + " " + user.getLastName() + " wrote: " + message.getText());
 
         if (message.hasText()) {
-            sendText(user.getId(), "Dear " + user.getUserName() + " !");
-            String text = message.getText();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd 'T' HH:mm:ss");
+            if (user.getLanguageCode().equals("ru")) {
+                sendText(user.getId(), "Дорогой " + user.getUserName() +
+                        " \uD83D\uDC49\uD83D\uDC4C\uD83D\uDCA6\uD83D\uDCA6\uD83D\uDCA6\uD83D\uDCA6\uD83D\uDCA6");
 
-            switch (text) {
-                case "BTC", "ETH", "SOL" -> telegramUserService.register(text, update).
-                        subscribe(telegramUserDto -> sendText(user.getId(),
-                                "You will be notified if the price of cryptocurrency " + text + " changes"));
-                case "ViewAll" -> telegramUserService.viewListOfAvailable()
-                        .subscribe(showTelegramCoinDtoToUser(user, formatter));
-                case "Symbol:BTC", "Symbol:ETH", "Symbol:SOL" ->
-                        telegramUserService.findFirstBySymbol(text.substring(7, 10))
-                                .subscribe(showTelegramCoinDtoToUser(user, formatter));
-                default -> sendText(user.getId(), """
-                        Available commands :
-                        BTC
-                        ETH
-                        SOL
-                        ViewAll
-                        Symbol:BTC
-                        Symbol:ETH
-                        Symbol:SOL""");
+                switch (text) {
+                    case "/notifybtc", "/notifyeth", "/notifysol" -> telegramUserService
+                            .register(text.substring(7, 10).toUpperCase(), update)
+                            .subscribe(telegramUserDto -> sendText(user.getId(),
+                                    "Вы будете уведомлены если цена крипты "
+                                            + text.substring(7, 10).toUpperCase() + " изменится"));
+                    case "/viewall" -> telegramUserService.viewListOfAvailable()
+                            .subscribe(showTelegramCoinDtoToUser(user, formatter));
+                    case "/btc", "/eth", "/sol" -> telegramUserService.findFirstBySymbol(text.substring(1, 4).toUpperCase())
+                            .subscribe(showTelegramCoinDtoToUser(user, formatter));
+                    default -> sendText(user.getId(), """
+                            Доступные команды :
+                            /notifybtc - уведомляет юзера о изменении цены 0.01% на Биткоин
+                            /notifyeth - уведомляет юзера о изменении цены 0.01% на Эфир
+                            /notifysol - уведомляет юзера о изменении цены 0.01% на Солану
+                            /viewall - показывает актуальную цену на все крипто валюты
+                            /btc - показывает актуальную цену на Биткоин
+                            /eth - показывает актуальную цену на Эфир
+                            /sol - показывает актуальную цену на Солану""");
+                }
+            } else {
+                sendText(user.getId(), "Dear " + user.getUserName() +
+                        " \uD83D\uDC49\uD83D\uDC4C\uD83D\uDCA6\uD83D\uDCA6\uD83D\uDCA6\uD83D\uDCA6\uD83D\uDCA6");
+
+                switch (text) {
+                    case "/notifybtc", "/notifyeth", "/notifysol" -> telegramUserService
+                            .register(text.substring(7, 10).toUpperCase(), update)
+                            .subscribe(telegramUserDto -> sendText(user.getId(),
+                                    "You will be notified if the price of cryptocurrency "
+                                            + text.substring(7, 10).toUpperCase() + " changes"));
+                    case "/viewall" -> telegramUserService.viewListOfAvailable()
+                            .subscribe(showTelegramCoinDtoToUser(user, formatter));
+                    case "/btc", "/eth", "/sol" -> telegramUserService.findFirstBySymbol(text.substring(1, 4).toUpperCase())
+                            .subscribe(showTelegramCoinDtoToUser(user, formatter));
+                    default -> sendText(user.getId(), """
+                            Available commands :
+                            /notifybtc - notifies the user about a change 0.01% in Bitcoin
+                            /notifyeth - notifies the user about a change 0.01% in Etherium
+                            /notifysol - notifies the user about a change 0.01% in Solana
+                            /viewall - shows the current price at the moment for all
+                            /btc - shows the current price at the moment for Bitcoin
+                            /eth - shows the current price at the moment for Etherium
+                            /sol - shows the current price at the moment for Solana""");
+                }
             }
         } else {
             sendText(user.getId(), "Available only text messages!");

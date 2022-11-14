@@ -34,3 +34,6 @@ databaseChangeLog:
               - column:
                   name: telegram_id
                   type: bigint
+              - column:
+                  name: language_code
+                  type: varchar(30)
