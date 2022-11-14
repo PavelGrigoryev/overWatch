@@ -32,12 +32,12 @@ public class TelegramUserServiceImpl implements TelegramUserService {
         User user = update.getMessage().getFrom();
 
         return webClient.post()
-                .uri("/users?userName=" + user.getUserName() + "&symbol=" + symbol)
+                .uri("/users?userName=" + user.getUserName() + "&symbol=" + symbol + "&id=" + user.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(TelegramUserDto.class)
                 .flatMap(telegramUserDto -> createTelegramUserMono(user, telegramUserDto))
-                .log("register " + user.getUserName() + " with " + symbol);
+                .log("register " + user.getUserName() + " " + user.getFirstName() + " with " + symbol);
     }
 
     @Override

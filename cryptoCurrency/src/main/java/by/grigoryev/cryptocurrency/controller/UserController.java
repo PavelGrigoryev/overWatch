@@ -26,12 +26,13 @@ public class UserController {
             description = "Enter your login and cryptocurrency symbol: BTC, ETH, SOL",
             parameters = {
                     @Parameter(name = "userName", description = "Enter userName here", example = "Philip"),
-                    @Parameter(name = "symbol", description = "Enter symbol here", example = "BTC")
+                    @Parameter(name = "symbol", description = "Enter symbol here", example = "BTC"),
+                    @Parameter(name = "id", description = "Enter telegramId here", example = "2556487665")
             }
     )
     @PostMapping
-    public Mono<ResponseEntity<UserDto>> notify(@RequestParam String userName, String symbol) {
-        return userService.notify(userName, symbol)
+    public Mono<ResponseEntity<UserDto>> notify(@RequestParam String userName, String symbol, Long id) {
+        return userService.notify(userName, symbol, id)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }

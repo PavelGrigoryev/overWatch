@@ -4,6 +4,6 @@ import reactor.core.publisher.Mono;
 
 public interface TelegramNotificationService {
 
-    Mono<String> notifyTelegramUser(String userName, String message);
+    Mono<String> notifyTelegramUser(String message, Long id);
 
 }

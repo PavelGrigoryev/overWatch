@@ -10,15 +10,15 @@ import reactor.core.publisher.Mono;
 public class NotificationServiceImpl implements NotificationService {
 
     @Override
-    public Mono<String> notifyTelegramUser(String userName, String message) {
+    public Mono<String> notifyTelegramUser(String message, Long id) {
         WebClient webClient = WebClient.create();
         return webClient.post()
-                .uri("http://localhost:8084/telegrams?userName=" + userName + "&message=" + message)
+                .uri("http://localhost:8084/telegrams?message=" + message + "&id=" + id)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(String.class)
                 .onErrorComplete()
-                .log("notifyTelegramUser");
+                .log("notifyTelegramUser id#" + id);
     }
 
 }

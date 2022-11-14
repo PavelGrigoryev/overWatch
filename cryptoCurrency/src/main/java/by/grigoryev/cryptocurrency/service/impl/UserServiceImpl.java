@@ -33,9 +33,9 @@ public class UserServiceImpl implements UserService {
     private final NotificationService notificationService;
 
     @Override
-    public Mono<UserDto> notify(String userName, String symbol) {
+    public Mono<UserDto> notify(String userName, String symbol, Long id) {
         return coinRepository.findFirstBySymbolOrderByTimeOfReceivingDesc(symbol)
-                .flatMap(coin -> createUserMono(userName, coin))
+                .flatMap(coin -> createUserMono(userName, coin, id))
                 .log("notify " + userName + " for " + symbol);
     }
 
@@ -63,19 +63,20 @@ public class UserServiceImpl implements UserService {
         if (Math.abs(percentage.doubleValue()) >= 0.01) {
             log.warn("Price for user #{} {} with {} changed {} %", userPrice.getT1().getId(),
                     userPrice.getT1().getUserName(), userPrice.getT2().getName(), percentage);
-            notificationService.notifyTelegramUser(userPrice.getT1().getUserName(), "Price for cryptocurrency " +
-                            userPrice.getT2().getName() + " changed " + percentage + "%\n" + "Old was: " +
-                            userPrice.getT1().getCoinPrice() + "\nNew is: " + userPrice.getT2().getPriceUsd())
+            notificationService.notifyTelegramUser("Price for cryptocurrency " + userPrice.getT2().getName()
+                            + " changed " + percentage + "%\n" + "Old was: " + userPrice.getT1().getCoinPrice()
+                            + "\nNew is: " + userPrice.getT2().getPriceUsd(), userPrice.getT1().getTelegramUserId())
                     .subscribe();
         }
     }
 
-    private Mono<UserDto> createUserMono(String userName, Coin coin) {
+    private Mono<UserDto> createUserMono(String userName, Coin coin, Long id) {
         User user = User.builder()
                 .userName(userName)
                 .coinSymbol(coin.getSymbol())
                 .coinPrice(coin.getPriceUsd())
                 .timeOfRegistration(LocalDateTime.now())
+                .telegramUserId(id)
                 .build();
         return userRepository.save(user)
                 .map(userMapper::toUserDto);

@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
         "user_name",
         "coin_symbol",
         "coin_price",
-        "time_of_registration"
+        "time_of_registration",
+        "telegram_id"
 })
 public class UserDto {
 
@@ -34,4 +35,8 @@ public class UserDto {
     @JsonProperty("time_of_registration")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime timeOfRegistration;
+
+    @JsonProperty("telegram_id")
+    private Long telegramUserId;
+
 }

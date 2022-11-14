@@ -17,8 +17,8 @@ public class TelegramNotificationController {
     private final TelegramNotificationService telegramNotificationService;
 
     @PostMapping
-    public Mono<ResponseEntity<String>> notifyTelegramUser(@RequestParam String userName, String message) {
-        return telegramNotificationService.notifyTelegramUser(userName, message)
+    public Mono<ResponseEntity<String>> notifyTelegramUser(@RequestParam String message, Long id) {
+        return telegramNotificationService.notifyTelegramUser(message, id)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }

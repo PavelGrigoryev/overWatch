@@ -5,6 +5,6 @@ import reactor.core.publisher.Mono;
 
 public interface UserService {
 
-    Mono<UserDto> notify(String userName, String symbol);
+    Mono<UserDto> notify(String userName, String symbol, Long id);
 
 }

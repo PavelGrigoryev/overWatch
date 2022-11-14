@@ -16,11 +16,11 @@ public class TelegramNotificationServiceImpl implements TelegramNotificationServ
     private final TelegramUserRepository telegramUserRepository;
 
     @Override
-    public Mono<String> notifyTelegramUser(String userName, String message) {
-        return Mono.from(telegramUserRepository.findByUserName(userName)
+    public Mono<String> notifyTelegramUser(String message, Long id) {
+        return Mono.from(telegramUserRepository.findByTelegramUserId(id)
                 .map(telegramUser -> {
                     telegramBot.sendText(telegramUser.getTelegramUserId(), message);
-                    return userName + message;
+                    return id + " " + message;
                 })
                 .log());
     }

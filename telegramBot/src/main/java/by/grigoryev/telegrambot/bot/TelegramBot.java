@@ -46,11 +46,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         String text = message.getText();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd 'T' HH:mm:ss");
 
-        log.warn(user.getUserName() + " " + user.getFirstName() + " " + user.getLastName() + " wrote: " + message.getText());
+        log.warn(user.getUserName() + " " + user.getFirstName() + " " + user.getLastName() + " wrote: " + text);
 
         if (message.hasText()) {
             if (user.getLanguageCode().equals("ru")) {
-                sendText(user.getId(), "Дорогой " + user.getUserName() +
+                sendText(user.getId(), "Дорогой " + user.getFirstName() +
                         " \uD83D\uDC49\uD83D\uDC4C\uD83D\uDCA6\uD83D\uDCA6\uD83D\uDCA6\uD83D\uDCA6\uD83D\uDCA6");
 
                 switch (text) {
@@ -61,8 +61,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                                             + text.substring(7, 10).toUpperCase() + " изменится"));
                     case "/viewall" -> telegramUserService.viewListOfAvailable()
                             .subscribe(showTelegramCoinDtoToUser(user, formatter));
-                    case "/btc", "/eth", "/sol" -> telegramUserService.findFirstBySymbol(text.substring(1, 4).toUpperCase())
-                            .subscribe(showTelegramCoinDtoToUser(user, formatter));
+                    case "/btc", "/eth", "/sol" ->
+                            telegramUserService.findFirstBySymbol(text.substring(1, 4).toUpperCase())
+                                    .subscribe(showTelegramCoinDtoToUser(user, formatter));
                     default -> sendText(user.getId(), """
                             Доступные команды :
                             /notifybtc - уведомляет юзера о изменении цены 0.01% на Биткоин
@@ -74,7 +75,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                             /sol - показывает актуальную цену на Солану""");
                 }
             } else {
-                sendText(user.getId(), "Dear " + user.getUserName() +
+                sendText(user.getId(), "Dear " + user.getFirstName() +
                         " \uD83D\uDC49\uD83D\uDC4C\uD83D\uDCA6\uD83D\uDCA6\uD83D\uDCA6\uD83D\uDCA6\uD83D\uDCA6");
 
                 switch (text) {
@@ -85,8 +86,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                                             + text.substring(7, 10).toUpperCase() + " changes"));
                     case "/viewall" -> telegramUserService.viewListOfAvailable()
                             .subscribe(showTelegramCoinDtoToUser(user, formatter));
-                    case "/btc", "/eth", "/sol" -> telegramUserService.findFirstBySymbol(text.substring(1, 4).toUpperCase())
-                            .subscribe(showTelegramCoinDtoToUser(user, formatter));
+                    case "/btc", "/eth", "/sol" ->
+                            telegramUserService.findFirstBySymbol(text.substring(1, 4).toUpperCase())
+                                    .subscribe(showTelegramCoinDtoToUser(user, formatter));
                     default -> sendText(user.getId(), """
                             Available commands :
                             /notifybtc - notifies the user about a change 0.01% in Bitcoin

@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
         "coin_symbol",
         "coin_price",
         "time_when_the_message_was_sent",
+        "telegram_id",
         "language_code"
 })
 public class TelegramUserDto {
@@ -43,6 +44,9 @@ public class TelegramUserDto {
     @JsonProperty("time_when_the_message_was_sent")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime timeWhenTheMessageWasSent;
+
+    @JsonProperty("telegram_id")
+    private Long telegramUserId;
 
     @JsonProperty("language_code")
     private String languageCode;
