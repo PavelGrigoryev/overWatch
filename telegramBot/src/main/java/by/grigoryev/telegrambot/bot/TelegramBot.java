@@ -1,7 +1,7 @@
 package by.grigoryev.telegrambot.bot;
 
 import by.grigoryev.telegrambot.dto.TelegramCoinDto;
-import by.grigoryev.telegrambot.service.TelegramButtonsService;
+import by.grigoryev.telegrambot.service.TelegramButtonsForCryptoCurrencyService;
 import by.grigoryev.telegrambot.service.TelegramUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -34,7 +35,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final TelegramUserService telegramUserService;
 
-    private final TelegramButtonsService telegramButtonsService;
+    private final TelegramButtonsForCryptoCurrencyService telegramButtonsForCryptoCurrencyService;
 
     @Override
     public String getBotUsername() {
@@ -84,14 +85,16 @@ public class TelegramBot extends TelegramLongPollingBot {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd 'T' HH:mm:ss");
         log.warn("{} action: {}", user.getFirstName(), action);
         switch (action) {
-            case "notify:btc", "notify:eth", "notify:sol" -> telegramUserService
-                    .register(action.substring(7, 10).toUpperCase(), callbackQuery)
+            case "notify" -> addEditMessage(callbackQuery, telegramButtonsForCryptoCurrencyService.addNotifyButtons());
+            case "btc", "eth", "sol" -> telegramUserService.register(action.toUpperCase(), callbackQuery)
                     .subscribe(telegramUserDto -> sendText(user.getId(),
                             "You will be notified if the price of cryptocurrency "
-                                    + action.substring(7, 10).toUpperCase() + " changes"));
-            case "viewAll" -> telegramUserService.viewListOfAvailable()
+                                    + action.toUpperCase() + " changes!"));
+            case "showCoin" ->
+                    addEditMessage(callbackQuery, telegramButtonsForCryptoCurrencyService.addShowCoinButtons());
+            case "btc!", "eth!", "sol!" -> telegramUserService.findFirstBySymbol(action.substring(0, 3).toUpperCase())
                     .subscribe(showTelegramCoinDtoToUser(user, formatter));
-            case "btc", "eth", "sol" -> telegramUserService.findFirstBySymbol(action.toUpperCase())
+            case "showAllCoins" -> telegramUserService.viewListOfAvailable()
                     .subscribe(showTelegramCoinDtoToUser(user, formatter));
             default -> sendText(user.getId(), """
                     Available command :
@@ -103,6 +106,15 @@ public class TelegramBot extends TelegramLongPollingBot {
                 .build();
 
         execute(close);
+    }
+
+    @SneakyThrows
+    private void addEditMessage(CallbackQuery callbackQuery, InlineKeyboardMarkup inlineKeyboardMarkup) {
+        execute(EditMessageReplyMarkup.builder()
+                .chatId(callbackQuery.getFrom().getId())
+                .messageId(callbackQuery.getMessage().getMessageId())
+                .replyMarkup(inlineKeyboardMarkup)
+                .build());
     }
 
     private Consumer<TelegramCoinDto> showTelegramCoinDtoToUser(User user, DateTimeFormatter formatter) {
@@ -124,13 +136,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @SneakyThrows
     public void sendMenu(Long who, String what) {
-        InlineKeyboardMarkup inlineKeyboardMarkup = telegramButtonsService.addButtonsToCryptoCurrency();
-
         SendMessage sendMessage = SendMessage.builder()
                 .chatId(who.toString())
                 .parseMode("HTML")
                 .text(what)
-                .replyMarkup(inlineKeyboardMarkup)
+                .replyMarkup(telegramButtonsForCryptoCurrencyService.addMainButtons())
                 .build();
 
         execute(sendMessage);
