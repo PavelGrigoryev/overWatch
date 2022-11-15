@@ -1,6 +1,7 @@
 package by.grigoryev.telegrambot.bot;
 
 import by.grigoryev.telegrambot.dto.TelegramCoinDto;
+import by.grigoryev.telegrambot.service.TelegramButtonsService;
 import by.grigoryev.telegrambot.service.TelegramUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -15,10 +16,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.function.Consumer;
 
 @Slf4j
@@ -26,7 +25,7 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class TelegramBot extends TelegramLongPollingBot {
 
-    public static final String MENU_FOR = "Menu for ";
+    public static final String MENU_FOR = "<b>Menu for </b>";
     @Value("${bot.name}")
     private String botName;
 
@@ -34,6 +33,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     private String botToken;
 
     private final TelegramUserService telegramUserService;
+
+    private final TelegramButtonsService telegramButtonsService;
 
     @Override
     public String getBotUsername() {
@@ -81,7 +82,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         User user = callbackQuery.getFrom();
         String action = callbackQuery.getData();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd 'T' HH:mm:ss");
-        log.warn("action from user {} : {}", user.getFirstName(), action);
+        log.warn("{} action: {}", user.getFirstName(), action);
         switch (action) {
             case "notify:btc", "notify:eth", "notify:sol" -> telegramUserService
                     .register(action.substring(7, 10).toUpperCase(), callbackQuery)
@@ -123,53 +124,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @SneakyThrows
     public void sendMenu(Long who, String what) {
-        InlineKeyboardButton notifyBTC = InlineKeyboardButton.builder()
-                .text("Notify: BTC")
-                .callbackData("notify:btc")
-                .build();
-
-        InlineKeyboardButton notifyETH = InlineKeyboardButton.builder()
-                .text("Notify: ETH")
-                .callbackData("notify:eth")
-                .build();
-
-        InlineKeyboardButton notifySOL = InlineKeyboardButton.builder()
-                .text("Notify: SOL")
-                .callbackData("notify:sol")
-                .build();
-
-        InlineKeyboardButton viewAll = InlineKeyboardButton.builder()
-                .text("ViewAll cryptos")
-                .callbackData("viewAll")
-                .build();
-
-        InlineKeyboardButton btc = InlineKeyboardButton.builder()
-                .text("BTC price")
-                .callbackData("btc")
-                .build();
-
-        InlineKeyboardButton eth = InlineKeyboardButton.builder()
-                .text("ETH price")
-                .callbackData("eth")
-                .build();
-
-        InlineKeyboardButton sol = InlineKeyboardButton.builder()
-                .text("SOL price")
-                .callbackData("sol")
-                .build();
-
-        InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder()
-                .keyboardRow(List.of(notifyBTC))
-                .keyboardRow(List.of(notifyETH))
-                .keyboardRow(List.of(notifySOL))
-                .keyboardRow(List.of(viewAll))
-                .keyboardRow(List.of(btc))
-                .keyboardRow(List.of(eth))
-                .keyboardRow(List.of(sol))
-                .build();
+        InlineKeyboardMarkup inlineKeyboardMarkup = telegramButtonsService.addButtonsToCryptoCurrency();
 
         SendMessage sendMessage = SendMessage.builder()
                 .chatId(who.toString())
+                .parseMode("HTML")
                 .text(what)
                 .replyMarkup(inlineKeyboardMarkup)
                 .build();
