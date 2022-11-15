@@ -26,7 +26,6 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class TelegramBot extends TelegramLongPollingBot {
 
-    public static final String MENU_FOR = "<b>Menu for </b>";
     @Value("${bot.name}")
     private String botName;
 
@@ -67,7 +66,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                     " \uD83D\uDC49\uD83D\uDC4C\uD83D\uDCA6\uD83D\uDCA6\uD83D\uDCA6\uD83D\uDCA6\uD83D\uDCA6");
 
             if ("/menu".equals(text)) {
-                sendMenu(user.getId(), MENU_FOR + user.getFirstName());
+                sendMenu(user.getId(), "<b>Main Menu for " + user.getFirstName()
+                        + " \uD83C\uDF1E\uD83C\uDF1E\uD83C\uDF1E\uD83C\uDF08\uD83C\uDF08" +
+                        "\uD83C\uDF08\uD83C\uDF1A\uD83C\uDF1A\uD83C\uDF1A</b>");
             } else {
                 sendText(user.getId(), """
                         Available command :
@@ -96,6 +97,8 @@ public class TelegramBot extends TelegramLongPollingBot {
                     .subscribe(showTelegramCoinDtoToUser(user, formatter));
             case "showAllCoins" -> telegramUserService.viewListOfAvailable()
                     .subscribe(showTelegramCoinDtoToUser(user, formatter));
+            case "backFromNotify", "backFromShowCoin" ->
+                    addEditMessage(callbackQuery, telegramButtonsForCryptoCurrencyService.addMainButtons());
             default -> sendText(user.getId(), """
                     Available command :
                     /menu""");

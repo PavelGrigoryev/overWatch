@@ -28,9 +28,7 @@ public class TelegramButtonsForCryptoCurrencyServiceImpl implements TelegramButt
                 .build();
 
         return InlineKeyboardMarkup.builder()
-                .keyboardRow(List.of(notifyMe))
-                .keyboardRow(List.of(showCoin))
-                .keyboardRow(List.of(showAllCoins))
+                .keyboardRow(List.of(notifyMe, showCoin, showAllCoins))
                 .build();
     }
 
@@ -52,10 +50,14 @@ public class TelegramButtonsForCryptoCurrencyServiceImpl implements TelegramButt
                 .callbackData("sol")
                 .build();
 
+        InlineKeyboardButton back = InlineKeyboardButton.builder()
+                .text("Back to Main Menu")
+                .callbackData("backFromNotify")
+                .build();
+
         return InlineKeyboardMarkup.builder()
-                .keyboardRow(List.of(btc))
-                .keyboardRow(List.of(eth))
-                .keyboardRow(List.of(sol))
+                .keyboardRow(List.of(btc, eth, sol))
+                .keyboardRow(List.of(back))
                 .build();
     }
 
@@ -76,10 +78,14 @@ public class TelegramButtonsForCryptoCurrencyServiceImpl implements TelegramButt
                 .callbackData("sol!")
                 .build();
 
+        InlineKeyboardButton back = InlineKeyboardButton.builder()
+                .text("Back to Main Menu")
+                .callbackData("backFromShowCoin")
+                .build();
+
         return InlineKeyboardMarkup.builder()
-                .keyboardRow(List.of(btc))
-                .keyboardRow(List.of(eth))
-                .keyboardRow(List.of(sol))
+                .keyboardRow(List.of(btc, eth, sol))
+                .keyboardRow(List.of(back))
                 .build();
     }
 
