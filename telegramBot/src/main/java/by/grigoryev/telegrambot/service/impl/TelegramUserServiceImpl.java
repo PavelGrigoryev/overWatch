@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.User;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -28,9 +28,8 @@ public class TelegramUserServiceImpl implements TelegramUserService {
     private final WebClient webClient;
 
     @Override
-    public Mono<TelegramUserDto> register(String symbol, Update update) {
-        User user = update.getMessage().getFrom();
-
+    public Mono<TelegramUserDto> register(String symbol, CallbackQuery callbackQuery) {
+        User user = callbackQuery.getFrom();
         return webClient.post()
                 .uri("/users?userName=" + user.getUserName() + "&symbol=" + symbol + "&id=" + user.getId())
                 .accept(MediaType.APPLICATION_JSON)
