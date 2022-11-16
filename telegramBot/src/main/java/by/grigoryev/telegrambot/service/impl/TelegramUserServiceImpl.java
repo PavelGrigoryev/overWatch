@@ -59,6 +59,16 @@ public class TelegramUserServiceImpl implements TelegramUserService {
                 .log("findBySymbol " + symbol);
     }
 
+    @Override
+    public Flux<TelegramUserDto> findAll() {
+        return webClient.get()
+                .uri("/users")
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToFlux(TelegramUserDto.class)
+                .log("FindAllTelegramUsers");
+    }
+
     private Mono<TelegramUserDto> createTelegramUserMono(User user, TelegramUserDto telegramUserDto) {
         TelegramUser telegramUser = TelegramUser.builder()
                 .userName(user.getUserName())

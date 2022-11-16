@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 
@@ -37,6 +38,11 @@ public class UserServiceImpl implements UserService {
         return coinRepository.findFirstBySymbolOrderByTimeOfReceivingDesc(symbol)
                 .flatMap(coin -> createUserMono(userName, coin, id))
                 .log("notify " + userName + " for " + symbol);
+    }
+
+    @Override
+    public Flux<UserDto> findAll() {
+        return userRepository.findAll().map(userMapper::toUserDto).log("FindAllUsers");
     }
 
     /**

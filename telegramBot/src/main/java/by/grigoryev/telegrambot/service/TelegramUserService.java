@@ -14,4 +14,6 @@ public interface TelegramUserService {
 
     Mono<TelegramCoinDto> findFirstBySymbol(String symbol);
 
+    Flux<TelegramUserDto> findAll();
+
 }
