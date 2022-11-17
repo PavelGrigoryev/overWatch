@@ -80,13 +80,13 @@ public class TelegramUserServiceImpl implements TelegramUserService {
     }
 
     @Override
-    public Mono<String> deleteById(Long id) {
+    public Mono<String> deleteById(Long id, Long telegramId) {
         return webClient.delete()
-                .uri("/users/delete?id=" + id)
+                .uri("/users/delete?id=" + id + "&telegramId=" + telegramId)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(String.class)
-                .onErrorReturn("Your notification with id#" + id + " not found")
+                .onErrorReturn("Your notification #" + id + " not found")
                 .log("deleteById#" + id);
     }
 

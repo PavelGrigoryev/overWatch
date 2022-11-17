@@ -60,14 +60,15 @@ public class UserController {
     @Operation(
             summary = "Delete your one user by id", tags = "User", description = "Enter your id",
             parameters = {
-                    @Parameter(name = "id", description = "Enter your id here", example = "3")
+                    @Parameter(name = "id", description = "Enter your id here", example = "3"),
+                    @Parameter(name = "telegramId", description = "Enter your telegramID here", example = "2556487665")
             }
     )
     @DeleteMapping("/delete")
-    public Mono<ResponseEntity<String>> deleteById(@RequestParam Long id) {
-        return userService.deleteById(id)
+    public Mono<ResponseEntity<String>> deleteById(@RequestParam Long id, Long telegramId) {
+        return userService.deleteById(id, telegramId)
                 .flatMap(userDto -> Mono.just(ResponseEntity
-                        .ok("Your notification with id " + id + " was successfully deleted")))
+                        .ok("Your notification # " + id + " was successfully deleted")))
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }
 

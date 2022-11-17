@@ -71,8 +71,13 @@ public class TelegramBot extends TelegramLongPollingBot {
                         "\uD83C\uDF08\uD83C\uDF1A\uD83C\uDF1A\uD83C\uDF1A</b>");
             } else if (text.startsWith("/delete#")) {
                 String deleteAction = text.substring(8);
-                telegramUserService.deleteById(Long.valueOf(deleteAction))
-                        .subscribe(string -> sendText(user.getId(), string));
+                try {
+                    telegramUserService.deleteById(Long.valueOf(deleteAction), user.getId())
+                            .subscribe(string -> sendText(user.getId(), string));
+                } catch (NumberFormatException e) {
+                    log.error(e.getMessage());
+                    sendText(user.getId(), "After # you can enter only whole numbers");
+                }
             } else {
                 sendText(user.getId(), """
                         Available command :
