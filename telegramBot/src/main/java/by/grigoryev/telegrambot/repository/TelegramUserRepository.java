@@ -8,6 +8,6 @@ import reactor.core.publisher.Flux;
 @Repository
 public interface TelegramUserRepository extends ReactiveCrudRepository<TelegramUser, Long> {
 
-    Flux<TelegramUser> findByTelegramUserId(Long id);
+    Flux<TelegramUser> findByTelegramUserId(Long telegramId);
 
 }

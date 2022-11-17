@@ -8,6 +8,8 @@ public interface UserService {
 
     Mono<UserDto> notify(String userName, String symbol, Long id);
 
-    Flux<UserDto> findAll();
+    Flux<UserDto> findAllByTelegramUserId(Long telegramId);
+
+    Mono<UserDto> deleteById(Long id);
 
 }

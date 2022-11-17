@@ -41,8 +41,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Flux<UserDto> findAll() {
-        return userRepository.findAll().map(userMapper::toUserDto).log("FindAllUsers");
+    public Flux<UserDto> findAllByTelegramUserId(Long telegramId) {
+        return userRepository.findAllByTelegramUserId(telegramId)
+                .map(userMapper::toUserDto)
+                .log("findAllByTelegramUserId#" + telegramId);
+    }
+
+    @Override
+    public Mono<UserDto> deleteById(Long id) {
+        return userRepository.findById(id)
+                .flatMap(user -> userRepository.deleteById(user.getId())
+                        .thenReturn(user))
+                .map(userMapper::toUserDto)
+                .log("deleteById#" + id);
     }
 
     /**

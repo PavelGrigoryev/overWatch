@@ -14,6 +14,8 @@ public interface TelegramUserService {
 
     Mono<TelegramCoinDto> findFirstBySymbol(String symbol);
 
-    Flux<TelegramUserDto> findAll();
+    Flux<TelegramUserDto> findAllByTelegramUserId(Long telegramId);
+
+    Mono<TelegramUserDto> deleteNotifierById(Long id);
 
 }

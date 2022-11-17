@@ -6,8 +6,12 @@ Accept: application/json
 GET http://localhost:8085/coins/BTC
 Accept: application/json
 
-###findAllUsers coin
-GET http://localhost:8085/users
+###find all users by telegramId
+GET http://localhost:8085/users?telegramId=25464646464
+Accept: application/json
+
+###delete user by id
+DELETE http://localhost:8085/users?id=11
 Accept: application/json
 
 ###save user#1

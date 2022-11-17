@@ -36,11 +36,26 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Find all users", tags = "User", description = "Find all users"
+            summary = "Find all your notifiers by your TelegramID", tags = "User", description = "Enter your TelegramID",
+            parameters = {
+                    @Parameter(name = "telegramId", description = "Enter your TelegramID here", example = "2556487665")
+            }
     )
     @GetMapping
-    public Flux<UserDto> findAll() {
-        return userService.findAll();
+    public Flux<UserDto> findAllByTelegramUserId(@RequestParam Long telegramId) {
+        return userService.findAllByTelegramUserId(telegramId);
+    }
+
+    @Operation(
+            summary = "Delete user by Id", tags = "User", description = "Enter your id", parameters = {
+            @Parameter(name = "id", description = "Enter your id here", example = "3")
+    }
+    )
+    @DeleteMapping
+    public Mono<ResponseEntity<String>> deleteById(@RequestParam Long id) {
+        return userService.deleteById(id)
+                .flatMap(userDto -> Mono.just(ResponseEntity.ok("User with id " + id + " successfully deleted")))
+                .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }
 
 }

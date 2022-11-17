@@ -97,10 +97,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                     .subscribe(showTelegramCoinDtoToUser(user, formatter));
             case "showAllCoins" -> telegramUserService.viewListOfAvailable()
                     .subscribe(showTelegramCoinDtoToUser(user, formatter));
-            case "findAll" -> telegramUserService.findAll()
+            case "findAll" -> telegramUserService.findAllByTelegramUserId(user.getId())
                     .subscribe(telegramUserDto -> sendText(user.getId(), "id: " + telegramUserDto.getId()
                             + "\nuserName: " + telegramUserDto.getUserName() + "\ncoin: " + telegramUserDto.getCoinSymbol()
                             + "\nprice: " + telegramUserDto.getCoinPrice()));
+           // case "delete" -> telegramUserService.deleteNotifierById().subscribe();
             case "back" -> addEditMessage(callbackQuery, telegramButtonsForCryptoCurrencyService.addMainButtons());
             default -> sendText(user.getId(), """
                     Available command :
