@@ -10,8 +10,12 @@ Accept: application/json
 GET http://localhost:8085/users?telegramId=25464646464
 Accept: application/json
 
-###delete user by id
+###delete all users by telegramId
 DELETE http://localhost:8085/users?telegramId=903325009
+Accept: application/json
+
+###delete user by id
+DELETE http://localhost:8085/users/delete?id=1
 Accept: application/json
 
 ###save user#1

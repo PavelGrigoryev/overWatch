@@ -76,7 +76,18 @@ public class TelegramUserServiceImpl implements TelegramUserService {
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToFlux(TelegramUserDto.class)
-                .log("deleteNotifierById#" + telegramId);
+                .log("deleteAllByTelegramUserId#" + telegramId);
+    }
+
+    @Override
+    public Mono<String> deleteById(Long id) {
+        return webClient.delete()
+                .uri("/users/delete?id=" + id)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(String.class)
+                .onErrorReturn("Your notification with id#" + id + " not found")
+                .log("deleteById#" + id);
     }
 
     private Mono<TelegramUserDto> createTelegramUserMono(User user, TelegramUserDto telegramUserDto) {

@@ -18,4 +18,6 @@ public interface TelegramUserService {
 
     Flux<TelegramUserDto> deleteAllByTelegramUserId(Long telegramId);
 
+    Mono<String> deleteById(Long id);
+
 }

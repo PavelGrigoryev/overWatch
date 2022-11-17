@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Find all your notifiers by your TelegramID", tags = "User", description = "Enter your TelegramID",
+            summary = "Find all users by your TelegramID", tags = "User", description = "Enter your TelegramID",
             parameters = {
                     @Parameter(name = "telegramId", description = "Enter your TelegramID here", example = "2556487665")
             }
@@ -47,13 +47,28 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Delete your notifiers by TelegramID", tags = "User", description = "Enter your TelegramID", parameters = {
-            @Parameter(name = "telegramId", description = "Enter your TelegramID here", example = "2556487665")
-    }
+            summary = "Delete your all users by TelegramID", tags = "User", description = "Enter your TelegramID",
+            parameters = {
+                    @Parameter(name = "telegramId", description = "Enter your TelegramID here", example = "2556487665")
+            }
     )
     @DeleteMapping
     public Flux<UserDto> deleteAllByTelegramUserId(@RequestParam Long telegramId) {
         return userService.deleteAllByTelegramUserId(telegramId);
+    }
+
+    @Operation(
+            summary = "Delete your one user by id", tags = "User", description = "Enter your id",
+            parameters = {
+                    @Parameter(name = "id", description = "Enter your id here", example = "3")
+            }
+    )
+    @DeleteMapping("/delete")
+    public Mono<ResponseEntity<String>> deleteById(@RequestParam Long id) {
+        return userService.deleteById(id)
+                .flatMap(userDto -> Mono.just(ResponseEntity
+                        .ok("Your notification with id " + id + " was successfully deleted")))
+                .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }
 
 }

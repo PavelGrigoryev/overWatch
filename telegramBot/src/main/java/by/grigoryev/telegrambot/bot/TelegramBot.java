@@ -69,6 +69,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                 sendMenu(user.getId(), "<b>Main Menu for " + user.getFirstName()
                         + " \uD83C\uDF1E\uD83C\uDF1E\uD83C\uDF1E\uD83C\uDF08\uD83C\uDF08" +
                         "\uD83C\uDF08\uD83C\uDF1A\uD83C\uDF1A\uD83C\uDF1A</b>");
+            } else if (text.startsWith("/delete#")) {
+                String deleteAction = text.substring(8);
+                telegramUserService.deleteById(Long.valueOf(deleteAction))
+                        .subscribe(string -> sendText(user.getId(), string));
             } else {
                 sendText(user.getId(), """
                         Available command :
@@ -99,12 +103,12 @@ public class TelegramBot extends TelegramLongPollingBot {
                     .subscribe(showTelegramCoinDtoToUser(user, formatter));
             case "findAll" -> telegramUserService.findAllByTelegramUserId(user.getId())
                     .switchIfEmpty(subscriber -> sendText(user.getId(), "You don't have notifications"))
-                    .subscribe(telegramUserDto -> sendText(user.getId(), "notification: " + telegramUserDto.getId()
+                    .subscribe(telegramUserDto -> sendText(user.getId(), "notification # " + telegramUserDto.getId()
                             + "\ncoin: " + telegramUserDto.getCoinSymbol()
                             + "\nprice: " + telegramUserDto.getCoinPrice()));
             case "delete" -> telegramUserService.deleteAllByTelegramUserId(user.getId())
                     .switchIfEmpty(subscriber -> sendText(user.getId(), "You don't have notifications"))
-                    .subscribe(telegramUserDto -> sendText(user.getId(), "Your notifications: "
+                    .subscribe(telegramUserDto -> sendText(user.getId(), "Your notification # "
                             + telegramUserDto.getId() + " was successfully deleted"));
             case "back" -> addEditMessage(callbackQuery, telegramButtonsForCryptoCurrencyService.addMainButtons());
             default -> sendText(user.getId(), """

@@ -17,7 +17,7 @@ public class NotificationServiceImpl implements NotificationService {
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(String.class)
-                .onErrorComplete()
+                .onErrorReturn("No user found with telegramId#" + telegramId)
                 .log("notifyTelegramUser telegramId#" + telegramId);
     }
 

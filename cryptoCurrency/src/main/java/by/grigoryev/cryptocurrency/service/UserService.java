@@ -12,4 +12,6 @@ public interface UserService {
 
     Flux<UserDto> deleteAllByTelegramUserId(Long telegramId);
 
+    Mono<UserDto> deleteById(Long id);
+
 }
