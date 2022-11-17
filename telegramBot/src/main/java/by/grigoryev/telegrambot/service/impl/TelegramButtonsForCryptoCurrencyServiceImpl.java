@@ -50,13 +50,13 @@ public class TelegramButtonsForCryptoCurrencyServiceImpl implements TelegramButt
                 .callbackData("sol")
                 .build();
 
-        InlineKeyboardButton findAllYourNotifiers = InlineKeyboardButton.builder()
-                .text("Find all you notifiers")
+        InlineKeyboardButton findAllYourNotifications = InlineKeyboardButton.builder()
+                .text("Find all your notifications")
                 .callbackData("findAll")
                 .build();
 
-        InlineKeyboardButton deleteYourNotifier = InlineKeyboardButton.builder()
-                .text("Delete your notifier by id")
+        InlineKeyboardButton deleteAllYourNotifications = InlineKeyboardButton.builder()
+                .text("Delete all your notifications")
                 .callbackData("delete")
                 .build();
 
@@ -67,8 +67,8 @@ public class TelegramButtonsForCryptoCurrencyServiceImpl implements TelegramButt
 
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(List.of(btc, eth, sol))
-                .keyboardRow(List.of(findAllYourNotifiers))
-                .keyboardRow(List.of(deleteYourNotifier))
+                .keyboardRow(List.of(findAllYourNotifications))
+                .keyboardRow(List.of(deleteAllYourNotifications))
                 .keyboardRow(List.of(back))
                 .build();
     }

@@ -16,6 +16,6 @@ public interface TelegramUserService {
 
     Flux<TelegramUserDto> findAllByTelegramUserId(Long telegramId);
 
-    Mono<TelegramUserDto> deleteNotifierById(Long id);
+    Flux<TelegramUserDto> deleteAllByTelegramUserId(Long telegramId);
 
 }

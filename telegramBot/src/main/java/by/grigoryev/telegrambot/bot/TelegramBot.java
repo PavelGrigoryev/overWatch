@@ -98,10 +98,14 @@ public class TelegramBot extends TelegramLongPollingBot {
             case "showAllCoins" -> telegramUserService.viewListOfAvailable()
                     .subscribe(showTelegramCoinDtoToUser(user, formatter));
             case "findAll" -> telegramUserService.findAllByTelegramUserId(user.getId())
-                    .subscribe(telegramUserDto -> sendText(user.getId(), "id: " + telegramUserDto.getId()
-                            + "\nuserName: " + telegramUserDto.getUserName() + "\ncoin: " + telegramUserDto.getCoinSymbol()
+                    .switchIfEmpty(subscriber -> sendText(user.getId(), "You don't have notifications"))
+                    .subscribe(telegramUserDto -> sendText(user.getId(), "notification: " + telegramUserDto.getId()
+                            + "\ncoin: " + telegramUserDto.getCoinSymbol()
                             + "\nprice: " + telegramUserDto.getCoinPrice()));
-           // case "delete" -> telegramUserService.deleteNotifierById().subscribe();
+            case "delete" -> telegramUserService.deleteAllByTelegramUserId(user.getId())
+                    .switchIfEmpty(subscriber -> sendText(user.getId(), "You don't have notifications"))
+                    .subscribe(telegramUserDto -> sendText(user.getId(), "Your notifications: "
+                            + telegramUserDto.getId() + " was successfully deleted"));
             case "back" -> addEditMessage(callbackQuery, telegramButtonsForCryptoCurrencyService.addMainButtons());
             default -> sendText(user.getId(), """
                     Available command :

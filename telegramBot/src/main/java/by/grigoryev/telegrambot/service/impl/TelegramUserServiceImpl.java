@@ -70,13 +70,13 @@ public class TelegramUserServiceImpl implements TelegramUserService {
     }
 
     @Override
-    public Mono<TelegramUserDto> deleteNotifierById(Long id) {
+    public Flux<TelegramUserDto> deleteAllByTelegramUserId(Long telegramId) {
         return webClient.delete()
-                .uri("/users?id=" + id)
+                .uri("/users?telegramId=" + telegramId)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(TelegramUserDto.class)
-                .log("deleteNotifierById#" + id);
+                .bodyToFlux(TelegramUserDto.class)
+                .log("deleteNotifierById#" + telegramId);
     }
 
     private Mono<TelegramUserDto> createTelegramUserMono(User user, TelegramUserDto telegramUserDto) {
