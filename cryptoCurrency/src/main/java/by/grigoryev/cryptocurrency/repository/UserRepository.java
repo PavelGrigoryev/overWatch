@@ -11,6 +11,8 @@ public interface UserRepository extends ReactiveCrudRepository<User, Long> {
 
     Flux<User> findAllByTelegramUserId(Long telegramId);
 
+    Mono<User> findByIdAndTelegramUserId(Long id, Long telegramId);
+
     Mono<User> deleteByIdAndTelegramUserId(Long id, Long telegramId);
 
 }
