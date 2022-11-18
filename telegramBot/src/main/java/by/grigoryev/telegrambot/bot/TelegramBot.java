@@ -2,6 +2,7 @@ package by.grigoryev.telegrambot.bot;
 
 import by.grigoryev.telegrambot.dto.TelegramCoinDto;
 import by.grigoryev.telegrambot.service.TelegramButtonsForCryptoCurrencyService;
+import by.grigoryev.telegrambot.service.TelegramCoinService;
 import by.grigoryev.telegrambot.service.TelegramUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -33,6 +34,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     private String botToken;
 
     private final TelegramUserService telegramUserService;
+
+    private final TelegramCoinService telegramCoinService;
 
     private final TelegramButtonsForCryptoCurrencyService telegramButtonsForCryptoCurrencyService;
 
@@ -102,9 +105,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                                     + action.toUpperCase() + " changes!"));
             case "showCoin" ->
                     addEditMessage(callbackQuery, telegramButtonsForCryptoCurrencyService.addShowCoinButtons());
-            case "btc!", "eth!", "sol!" -> telegramUserService.findFirstBySymbol(action.substring(0, 3).toUpperCase())
+            case "btc!", "eth!", "sol!" -> telegramCoinService.findFirstBySymbol(action.substring(0, 3).toUpperCase())
                     .subscribe(showTelegramCoinDtoToUser(user, formatter));
-            case "showAllCoins" -> telegramUserService.viewListOfAvailable()
+            case "showAllCoins" -> telegramCoinService.viewListOfAvailable()
                     .subscribe(showTelegramCoinDtoToUser(user, formatter));
             case "findAll" -> telegramUserService.findAllByTelegramUserId(user.getId())
                     .switchIfEmpty(subscriber -> sendText(user.getId(), "You don't have notifications"))

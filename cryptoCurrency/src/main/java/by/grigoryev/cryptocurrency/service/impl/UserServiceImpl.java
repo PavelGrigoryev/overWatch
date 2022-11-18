@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Mono<UserDto> deleteById(Long id, Long telegramId) {
+    public Mono<UserDto> deleteByIdAndTelegramUserId(Long id, Long telegramId) {
         return userRepository.findByIdAndTelegramUserId(id, telegramId)
                 .flatMap(user -> userRepository.deleteByIdAndTelegramUserId(user.getId(), user.getTelegramUserId())
                         .thenReturn(user))
