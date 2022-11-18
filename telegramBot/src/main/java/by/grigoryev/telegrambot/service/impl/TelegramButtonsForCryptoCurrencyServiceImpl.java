@@ -50,6 +50,36 @@ public class TelegramButtonsForCryptoCurrencyServiceImpl implements TelegramButt
                 .callbackData("sol")
                 .build();
 
+        InlineKeyboardButton bnb = InlineKeyboardButton.builder()
+                .text("for Binance Coin")
+                .callbackData("bnb")
+                .build();
+
+        InlineKeyboardButton dot = InlineKeyboardButton.builder()
+                .text("for Polkadot")
+                .callbackData("dot")
+                .build();
+
+        InlineKeyboardButton ltc = InlineKeyboardButton.builder()
+                .text("for Litecoin")
+                .callbackData("ltc")
+                .build();
+
+        InlineKeyboardButton avax = InlineKeyboardButton.builder()
+                .text("for Avalanche")
+                .callbackData("avax")
+                .build();
+
+        InlineKeyboardButton atom = InlineKeyboardButton.builder()
+                .text("for Cosmos")
+                .callbackData("atom")
+                .build();
+
+        InlineKeyboardButton near = InlineKeyboardButton.builder()
+                .text("for NEAR Protocol")
+                .callbackData("near")
+                .build();
+
         InlineKeyboardButton findAllYourNotifications = InlineKeyboardButton.builder()
                 .text("Find all your notifications")
                 .callbackData("findAll")
@@ -67,6 +97,8 @@ public class TelegramButtonsForCryptoCurrencyServiceImpl implements TelegramButt
 
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(List.of(btc, eth, sol))
+                .keyboardRow(List.of(bnb, dot, ltc))
+                .keyboardRow(List.of(avax, atom, near))
                 .keyboardRow(List.of(findAllYourNotifications))
                 .keyboardRow(List.of(deleteAllYourNotifications))
                 .keyboardRow(List.of(back))
@@ -77,17 +109,47 @@ public class TelegramButtonsForCryptoCurrencyServiceImpl implements TelegramButt
     public InlineKeyboardMarkup addShowCoinButtons() {
         InlineKeyboardButton btc = InlineKeyboardButton.builder()
                 .text("Bitcoin")
-                .callbackData("btc!")
+                .callbackData("!btc")
                 .build();
 
         InlineKeyboardButton eth = InlineKeyboardButton.builder()
                 .text("Ethereum")
-                .callbackData("eth!")
+                .callbackData("!eth")
                 .build();
 
         InlineKeyboardButton sol = InlineKeyboardButton.builder()
                 .text("Solana")
-                .callbackData("sol!")
+                .callbackData("!sol")
+                .build();
+
+        InlineKeyboardButton bnb = InlineKeyboardButton.builder()
+                .text("Binance Coin")
+                .callbackData("!bnb")
+                .build();
+
+        InlineKeyboardButton dot = InlineKeyboardButton.builder()
+                .text("Polkadot")
+                .callbackData("!dot")
+                .build();
+
+        InlineKeyboardButton ltc = InlineKeyboardButton.builder()
+                .text("Litecoin")
+                .callbackData("!ltc")
+                .build();
+
+        InlineKeyboardButton avax = InlineKeyboardButton.builder()
+                .text("Avalanche")
+                .callbackData("!avax")
+                .build();
+
+        InlineKeyboardButton atom = InlineKeyboardButton.builder()
+                .text("Cosmos")
+                .callbackData("!atom")
+                .build();
+
+        InlineKeyboardButton near = InlineKeyboardButton.builder()
+                .text("NEAR Protocol")
+                .callbackData("!near")
                 .build();
 
         InlineKeyboardButton back = InlineKeyboardButton.builder()
@@ -97,6 +159,8 @@ public class TelegramButtonsForCryptoCurrencyServiceImpl implements TelegramButt
 
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(List.of(btc, eth, sol))
+                .keyboardRow(List.of(bnb, dot, ltc))
+                .keyboardRow(List.of(avax, atom, near))
                 .keyboardRow(List.of(back))
                 .build();
     }

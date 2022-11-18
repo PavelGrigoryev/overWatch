@@ -37,9 +37,7 @@ public class UserController {
 
     @Operation(
             summary = "Find all users by your TelegramID", tags = "User", description = "Enter your TelegramID",
-            parameters = {
-                    @Parameter(name = "telegramId", description = "Enter your TelegramID here", example = "2556487665")
-            }
+            parameters = @Parameter(name = "telegramId", description = "Enter your TelegramID here", example = "2556487665")
     )
     @GetMapping
     public Flux<UserDto> findAllByTelegramUserId(@RequestParam Long telegramId) {
@@ -48,9 +46,7 @@ public class UserController {
 
     @Operation(
             summary = "Delete your all users by TelegramID", tags = "User", description = "Enter your TelegramID",
-            parameters = {
-                    @Parameter(name = "telegramId", description = "Enter your TelegramID here", example = "2556487665")
-            }
+            parameters = @Parameter(name = "telegramId", description = "Enter your TelegramID here", example = "2556487665")
     )
     @DeleteMapping
     public Flux<UserDto> deleteAllByTelegramUserId(@RequestParam Long telegramId) {

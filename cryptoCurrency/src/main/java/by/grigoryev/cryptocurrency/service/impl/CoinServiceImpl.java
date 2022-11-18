@@ -53,12 +53,12 @@ public class CoinServiceImpl implements CoinService {
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToFlux(Coin.class)
-                .flatMap(this::createCoinMono)
+                .flatMap(this::createCoin)
                 .log("savePricesForAvailable")
                 .subscribe();
     }
 
-    private Mono<CoinDto> createCoinMono(Coin coin) {
+    private Mono<CoinDto> createCoin(Coin coin) {
         Coin mapCoin = Coin.builder()
                 .id(coin.getId())
                 .name(coin.getName())

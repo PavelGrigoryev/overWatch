@@ -99,14 +99,16 @@ public class TelegramBot extends TelegramLongPollingBot {
         log.warn("{} action: {}", user.getFirstName(), action);
         switch (action) {
             case "notify" -> addEditMessage(callbackQuery, telegramButtonsForCryptoCurrencyService.addNotifyButtons());
-            case "btc", "eth", "sol" -> telegramUserService.register(action.toUpperCase(), callbackQuery)
-                    .subscribe(telegramUserDto -> sendText(user.getId(),
-                            "You will be notified if the price of cryptocurrency "
-                                    + action.toUpperCase() + " changes!"));
+            case "btc", "eth", "sol", "bnb", "dot", "ltc", "avax", "atom", "near" ->
+                    telegramUserService.register(action.toUpperCase(), callbackQuery)
+                            .subscribe(telegramUserDto -> sendText(user.getId(),
+                                    "You will be notified if the price of cryptocurrency "
+                                            + action.toUpperCase() + " changes!"));
             case "showCoin" ->
                     addEditMessage(callbackQuery, telegramButtonsForCryptoCurrencyService.addShowCoinButtons());
-            case "btc!", "eth!", "sol!" -> telegramCoinService.findFirstBySymbol(action.substring(0, 3).toUpperCase())
-                    .subscribe(showTelegramCoinDtoToUser(user, formatter));
+            case "!btc", "!eth", "!sol", "!bnb", "!dot", "!ltc", "!avax", "!atom", "!near" ->
+                    telegramCoinService.findFirstBySymbol(action.substring(1).toUpperCase())
+                            .subscribe(showTelegramCoinDtoToUser(user, formatter));
             case "showAllCoins" -> telegramCoinService.viewListOfAvailable()
                     .subscribe(showTelegramCoinDtoToUser(user, formatter));
             case "findAll" -> telegramUserService.findAllByTelegramUserId(user.getId())
