@@ -3,6 +3,7 @@ package by.grigoryev.telegrambot.bot;
 import by.grigoryev.telegrambot.dto.TelegramCoinDto;
 import by.grigoryev.telegrambot.service.TelegramButtonsForCryptoCurrencyService;
 import by.grigoryev.telegrambot.service.TelegramCoinService;
+import by.grigoryev.telegrambot.service.TelegramDateService;
 import by.grigoryev.telegrambot.service.TelegramUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -38,6 +39,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final TelegramCoinService telegramCoinService;
 
     private final TelegramButtonsForCryptoCurrencyService telegramButtonsForCryptoCurrencyService;
+
+    private final TelegramDateService telegramDateService;
 
     @Override
     public String getBotUsername() {
@@ -120,6 +123,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     .switchIfEmpty(subscriber -> sendText(user.getId(), "You don't have notifications"))
                     .subscribe(telegramUserDto -> sendText(user.getId(), "Your notification # "
                             + telegramUserDto.getId() + " was successfully deleted"));
+            case "dateToday" -> telegramDateService.findAFactAboutDateToday().subscribe(s -> sendText(user.getId(), s));
             case "back" -> addEditMessage(callbackQuery, telegramButtonsForCryptoCurrencyService.addMainButtons());
             default -> sendText(user.getId(), """
                     Available command :

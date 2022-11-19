@@ -27,8 +27,14 @@ public class TelegramButtonsForCryptoCurrencyServiceImpl implements TelegramButt
                 .callbackData("showAllCoins")
                 .build();
 
+        InlineKeyboardButton findAFactAboutDateToday = InlineKeyboardButton.builder()
+                .text("Get a fact about today's date")
+                .callbackData("dateToday")
+                .build();
+
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(List.of(notifyMe, showCoin, showAllCoins))
+                .keyboardRow(List.of(findAFactAboutDateToday))
                 .build();
     }
 
