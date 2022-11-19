@@ -17,6 +17,7 @@
     <modules>
         <module>cryptoCurrency</module>
         <module>telegramBot</module>
+        <module>numbers</module>
     </modules>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

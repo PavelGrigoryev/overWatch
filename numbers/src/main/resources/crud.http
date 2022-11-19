@@ -1,0 +1,3 @@
+###findAFactAboutDateToday
+GET http://localhost:8086/dates
+Accept: application/json
