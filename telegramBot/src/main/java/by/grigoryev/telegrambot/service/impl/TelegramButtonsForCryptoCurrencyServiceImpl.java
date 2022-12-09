@@ -12,6 +12,7 @@ public class TelegramButtonsForCryptoCurrencyServiceImpl implements TelegramButt
 
     @Override
     public InlineKeyboardMarkup addMainButtons() {
+
         InlineKeyboardButton notifyMe = InlineKeyboardButton.builder()
                 .text("Notify Me")
                 .callbackData("notify")
@@ -113,6 +114,7 @@ public class TelegramButtonsForCryptoCurrencyServiceImpl implements TelegramButt
 
     @Override
     public InlineKeyboardMarkup addShowCoinButtons() {
+
         InlineKeyboardButton btc = InlineKeyboardButton.builder()
                 .text("Bitcoin")
                 .callbackData("!btc")
